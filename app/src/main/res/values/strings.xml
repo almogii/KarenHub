@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KarenHub</string>
+    <string name="date">Date:</string>
 </resources>
