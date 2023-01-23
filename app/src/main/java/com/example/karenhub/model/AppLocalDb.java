@@ -8,7 +8,8 @@ import com.example.karenhub.MyApplication;
 
 @Database(entities = {Post.class}, version = 55)
 abstract class AppLocalDbRepository extends RoomDatabase {
-    public abstract StudentDao studentDao();
+    public abstract PostsDao PostsDao();
+
 }
 
 public class AppLocalDb{

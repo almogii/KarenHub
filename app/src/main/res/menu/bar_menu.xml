@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/studentsListFragment"
+        android:id="@+id/PostsListFragment"
         android:icon="@android:drawable/btn_star"
         android:title="List" />
     <item
-        android:id="@+id/addStudentFragment"
+        android:id="@+id/addNewPostFragment"
         android:icon="@android:drawable/ic_input_add"
         android:title="Add" />
 </menu>

@@ -22,13 +22,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.example.karenhub.databinding.FragmentAddStudentBinding;
+import com.example.karenhub.databinding.FragmentAddPostBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
 
-public class AddStudentFragment extends Fragment {
-    FragmentAddStudentBinding binding;
+public class AddNewPostFragment extends Fragment {
+    FragmentAddPostBinding binding;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
 
@@ -40,7 +41,7 @@ public class AddStudentFragment extends Fragment {
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.addStudentFragment);
+                menu.removeItem(R.id.addNewPostFragment);
             }
 
             @Override
@@ -73,14 +74,17 @@ public class AddStudentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentAddStudentBinding.inflate(inflater,container,false);
+        binding = FragmentAddPostBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
             String stId = binding.idEt.getText().toString();
             Post post = new Post(stId,name,"","");
-
+            if (name.equals("")||stId.equals("")){
+                Toast.makeText(getContext(),"missing name or ID",Toast.LENGTH_LONG).show();
+            }
+            else{
             if (isAvatarSelected){
                 binding.avatarImg.setDrawingCacheEnabled(true);
                 binding.avatarImg.buildDrawingCache();
@@ -98,9 +102,10 @@ public class AddStudentFragment extends Fragment {
                     Navigation.findNavController(view1).popBackStack();
                 });
             }
+            }
         });
 
-        binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.studentsListFragment,false));
+        binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postsListFragment,false));
 
         binding.cameraButton.setOnClickListener(view1->{
             cameraLauncher.launch(null);

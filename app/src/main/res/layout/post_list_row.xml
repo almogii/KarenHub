@@ -7,7 +7,7 @@
     android:background="?attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/studentlistrow_avatar_img"
+        android:id="@+id/postlistrow_avatar_img"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="4dp"
@@ -19,20 +19,20 @@
         app:srcCompat="@drawable/avatar" />
 
     <TextView
-        android:id="@+id/studentlistrow_name_tv"
+        android:id="@+id/postlistrow_name_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="TextView"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/studentlistrow_id_tv"
+        app:layout_constraintBottom_toTopOf="@+id/postlistrow_id_tv"
         app:layout_constraintEnd_toStartOf="@+id/studentlistrow_cb"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/studentlistrow_avatar_img"
+        app:layout_constraintStart_toEndOf="@+id/postlistrow_avatar_img"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/studentlistrow_id_tv"
+        android:id="@+id/postlistrow_id_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -41,6 +41,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/studentlistrow_cb"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/studentlistrow_avatar_img"
-        app:layout_constraintTop_toBottomOf="@+id/studentlistrow_name_tv" />
+        app:layout_constraintStart_toEndOf="@+id/postlistrow_avatar_img"
+        app:layout_constraintTop_toBottomOf="@+id/postlistrow_name_tv" />
 </androidx.constraintlayout.widget.ConstraintLayout>

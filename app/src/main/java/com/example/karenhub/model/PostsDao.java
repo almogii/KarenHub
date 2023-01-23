@@ -9,12 +9,12 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
-public interface StudentDao {
+public interface PostsDao {
     @Query("select * from Post")
     List<Post> getAll();
 
     @Query("select * from Post where id = :postId")
-    Post getStudentById(String postId);
+    Post getPostById(String postId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Post... posts);

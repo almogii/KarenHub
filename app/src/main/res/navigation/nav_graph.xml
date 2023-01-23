@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/studentsListFragment">
+    app:startDestination="@id/postsListFragment">
 
     <fragment
-        android:id="@+id/studentsListFragment"
-        android:name="com.example.karenhub.StudentsListFragment"
-        android:label="Students List"
-        tools:layout="@layout/fragment_students_list">
+        android:id="@+id/postsListFragment"
+        android:name="com.example.karenhub.PostsListFragment"
+        android:label="Posts List"
+        tools:layout="@layout/fragment_posts_list">
         <action
-            android:id="@+id/action_studentsListFragment_to_blueFragment"
+            android:id="@+id/action_postsListFragment_to_blueFragment"
             app:destination="@id/blueFragment" />
     </fragment>
     <fragment
@@ -24,11 +24,11 @@
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/addStudentFragment"
-        android:name="com.example.karenhub.AddStudentFragment"
-        android:label="Add Student"
-        tools:layout="@layout/fragment_add_student" />
-    <action android:id="@+id/action_global_addStudentFragment" app:destination="@id/addStudentFragment" />
+        android:id="@+id/addNewPostFragment"
+        android:name="com.example.karenhub.AddNewPostFragment"
+        android:label="Add Post"
+        tools:layout="@layout/fragment_add_post" />
+    <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addNewPostFragment" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.karenhub.AboutFragment"

@@ -7,7 +7,7 @@ import com.example.karenhub.model.Post;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StudentsListFragmentViewModel extends ViewModel {
+public class PostsListFragmentViewModel extends ViewModel {
     private List<Post> data = new LinkedList<>();
 
     List<Post> getData(){

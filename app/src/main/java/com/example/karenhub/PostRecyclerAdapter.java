@@ -3,7 +3,6 @@ package com.example.karenhub;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,17 +15,17 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 
-class StudentViewHolder extends RecyclerView.ViewHolder{
+class PostViewHolder extends RecyclerView.ViewHolder{
     TextView nameTv;
     TextView idTv;
     List<Post> data;
     ImageView avatarImage;
-    public StudentViewHolder(@NonNull View itemView, StudentRecyclerAdapter.OnItemClickListener listener, List<Post> data) {
+    public PostViewHolder(@NonNull View itemView, PostRecyclerAdapter.OnItemClickListener listener, List<Post> data) {
         super(itemView);
         this.data = data;
-        nameTv = itemView.findViewById(R.id.studentlistrow_name_tv);
-        idTv = itemView.findViewById(R.id.studentlistrow_id_tv);
-        avatarImage = itemView.findViewById(R.id.studentlistrow_avatar_img);
+        nameTv = itemView.findViewById(R.id.postlistrow_name_tv);
+        idTv = itemView.findViewById(R.id.postlistrow_id_tv);
+        avatarImage = itemView.findViewById(R.id.postlistrow_avatar_img);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,7 +48,7 @@ class StudentViewHolder extends RecyclerView.ViewHolder{
     }
 }
 
-public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentViewHolder>{
+public class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder>{
     OnItemClickListener listener;
     public static interface OnItemClickListener{
         void onItemClick(int pos);
@@ -61,7 +60,7 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentViewHold
         this.data = data;
         notifyDataSetChanged();
     }
-    public StudentRecyclerAdapter(LayoutInflater inflater, List<Post> data){
+    public PostRecyclerAdapter(LayoutInflater inflater, List<Post> data){
         this.inflater = inflater;
         this.data = data;
     }
@@ -71,13 +70,13 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentViewHold
     }
     @NonNull
     @Override
-    public StudentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.student_list_row,parent,false);
-        return new StudentViewHolder(view,listener, data);
+    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.post_list_row,parent,false);
+        return new PostViewHolder(view,listener, data);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post st = data.get(position);
         holder.bind(st,position);
     }

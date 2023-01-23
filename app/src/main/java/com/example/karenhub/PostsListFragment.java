@@ -15,39 +15,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.karenhub.databinding.FragmentStudentsListBinding;
+import com.example.karenhub.databinding.FragmentPostsListBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
 
-public class StudentsListFragment extends Fragment {
-    FragmentStudentsListBinding binding;
-    StudentRecyclerAdapter adapter;
-    StudentsListFragmentViewModel viewModel;
+public class PostsListFragment extends Fragment {
+    FragmentPostsListBinding binding;
+    PostRecyclerAdapter adapter;
+    PostsListFragmentViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentStudentsListBinding.inflate(inflater, container, false);
+        binding = FragmentPostsListBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new StudentRecyclerAdapter(getLayoutInflater(),viewModel.getData());
+        adapter = new PostRecyclerAdapter(getLayoutInflater(),viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new StudentRecyclerAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new PostRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
                 Post st = viewModel.getData().get(pos);
-                StudentsListFragmentDirections.ActionStudentsListFragmentToBlueFragment action = StudentsListFragmentDirections.actionStudentsListFragmentToBlueFragment(st.title);
+                PostsListFragmentDirections.ActionPostsListFragmentToBlueFragment action = PostsListFragmentDirections.actionPostsListFragmentToBlueFragment(st.title);
                 Navigation.findNavController(view).navigate(action);
             }
         });
 
         View addButton = view.findViewById(R.id.btnAdd);
-        NavDirections action = StudentsListFragmentDirections.actionGlobalAddStudentFragment();
+        NavDirections action = PostsListFragmentDirections.actionGlobalAddPostFragment();
         addButton.setOnClickListener(Navigation.createNavigateOnClickListener(action));
 
         return view;
@@ -56,7 +56,7 @@ public class StudentsListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(StudentsListFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PostsListFragmentViewModel.class);
     }
 
     @Override
