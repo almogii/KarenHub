@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.karenhub.model.FirebaseModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth=FirebaseAuth.getInstance();
 
         editTextemail=findViewById(R.id.email);
         editTextpassword=findViewById(R.id.password);
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String password,email;
-
+                mAuth=FirebaseAuth.getInstance();
                 email=String.valueOf(editTextemail.getText());
                 password=String.valueOf(editTextpassword.getText());
 
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
 
-                                        Toast.makeText(LoginActivity.this, "Authentication created.",
+                                        Toast.makeText(LoginActivity.this, "user has been authenticated",
                                                 Toast.LENGTH_SHORT).show();
 
                                     } else {

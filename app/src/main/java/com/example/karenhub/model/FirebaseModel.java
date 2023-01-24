@@ -2,13 +2,18 @@ package com.example.karenhub.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.karenhub.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -20,10 +25,12 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class FirebaseModel{
     FirebaseFirestore db;
     FirebaseStorage storage;
+    FirebaseAuth auth;
 
     FirebaseModel(){
         db = FirebaseFirestore.getInstance();
@@ -32,8 +39,10 @@ public class FirebaseModel{
                 .build();
         db.setFirestoreSettings(settings);
         storage = FirebaseStorage.getInstance();
+        auth=FirebaseAuth.getInstance();
 
     }
+
 
     public void getAllPosts(Model.Listener<List<Post>> callback){
         db.collection(Post.COLLECTION).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -86,6 +95,9 @@ public class FirebaseModel{
                 });
             }
         });
-
     }
+
+
+
+
 }
