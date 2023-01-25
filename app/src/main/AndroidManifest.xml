@@ -14,7 +14,7 @@
         android:theme="@style/Theme.KarenHub"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".SignUpActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -31,9 +31,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-
         </activity>
     </application>
-
+<uses-feature android:name="android.hardware.camera" android:required="false"></uses-feature>
 </manifest>

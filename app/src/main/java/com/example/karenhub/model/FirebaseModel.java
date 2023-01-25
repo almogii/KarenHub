@@ -2,12 +2,9 @@ package com.example.karenhub.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.karenhub.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,7 +22,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 public class FirebaseModel{
     FirebaseFirestore db;
@@ -97,6 +93,17 @@ public class FirebaseModel{
         });
     }
 
+    public void signUp(String email, String password, Model.Listener<Boolean> listener) {
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    listener.onComplete(true);
+                }
+                else{listener.onComplete(false);}
+            }
+        });
+    }
 
 
 
