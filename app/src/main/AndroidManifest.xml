@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -13,6 +17,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KarenHub"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD-q25_k7g6jPue3avd7zGrtwSYtkInfrs" />
+
+        <activity
+            android:name=".LogInActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+
+        </activity>
         <activity
             android:name=".SignUpActivity"
             android:exported="true">
@@ -24,7 +52,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="false">
@@ -33,5 +60,5 @@
                 android:value="" />
         </activity>
     </application>
-<uses-feature android:name="android.hardware.camera" android:required="false"></uses-feature>
+
 </manifest>

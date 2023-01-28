@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".SignUpActivity">
+    android:layout_height="match_parent"
+    tools:context=".LogInActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -17,11 +17,12 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/login_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:lineSpacingExtra="20sp"
-            android:text="signUp"
+            android:text="LogIn"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -31,21 +32,10 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
+                android:id="@+id/logInEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_email" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/AccLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_AccLabel" />
+                android:hint="email" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -53,22 +43,19 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
+                android:id="@+id/logInPassword"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:cursorVisible="true"
-                android:fontFamily="sans-serif-thin"
-                android:hint="@string/prompt_password"
-                android:inputType="textPassword"
-
-                />
+                android:layout_height="wrap_content"
+                android:hint="password" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/signUpBtn"
+            android:id="@+id/login_btn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="signUp" />
+            android:text="Button" />
+
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
