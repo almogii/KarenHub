@@ -61,8 +61,8 @@ public class Model {
     public void uploadImage(String name, Bitmap bitmap,Listener<String> listener) {
         firebaseModel.uploadImage(name,bitmap,listener);
     }
-     public void signUp(String email,String password,Listener<Boolean> listener){
-        firebaseModel.signUp(email,password,listener);
+     public void signUp(String email,String label,String password,Listener<Boolean> listener){
+        firebaseModel.signUp(email,label,password,listener);
      }
      public void login(String email,String password,Listener<String> listener){
         firebaseModel.login(email,password,listener);

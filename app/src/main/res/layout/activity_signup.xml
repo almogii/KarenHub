@@ -57,7 +57,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:cursorVisible="true"
-                android:fontFamily="sans-serif-thin"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
 
