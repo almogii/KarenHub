@@ -2,6 +2,7 @@ package com.example.karenhub.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -113,7 +115,7 @@ public class FirebaseModel{
         });
     }*/
 
-    public void signUp(String email, String label, String password, final Model.Listener<Boolean> listener) {
+    public void signUp(String email, String label, String password, Model.Listener<Pair<Boolean,String>> listener) {
         db.collection(User.COLLECTION).whereEqualTo(User.ACCOUNT_LABEL, label).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -130,21 +132,28 @@ public class FirebaseModel{
                                             db.collection(User.COLLECTION).add(user.toJson()).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                    listener.onComplete(true);
+                                                    listener.onComplete(new Pair<>(true, "Sign up success"));
                                                 }
                                             });
                                         } else {
-                                            listener.onComplete(false);
+                                            Exception exception = task.getException();
+                                            if (exception instanceof FirebaseAuthUserCollisionException) {
+                                                // Email already exists
+                                                listener.onComplete(new Pair<>(false, "Email already exists"));
+                                            } else {
+                                                // Other error
+                                                listener.onComplete(new Pair<>(false, "Sign up failed"));
+                                            }
                                         }
                                     }
                                 });
                     } else {
 
-                        listener.onComplete(false);
+                        listener.onComplete(new Pair<>(false, "Label is taken"));
                     }
                 } else {
 
-                    listener.onComplete(false);
+                    listener.onComplete(new Pair<>(false, "Error checking for unique label"));
                 }
             }
         });

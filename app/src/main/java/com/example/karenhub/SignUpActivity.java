@@ -94,8 +94,8 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
                 else{
-                    Model.instance().signUp(email,label,password,isok->{
-                        if(isok){
+                    Model.instance().signUp(email,label,password,(result)->{
+                        if(result.first){
                             // Sign up success, update UI with the signed-in user's information
                             Toast.makeText(SignUpActivity.this, "user has been authenticated", Toast.LENGTH_SHORT).show();
                             i = new Intent(getApplicationContext(), MainActivity.class);
@@ -106,7 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
                             finish();
                             return;
                         }
-                        else{ Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();}
+                        else{ Toast.makeText(SignUpActivity.this, result.second, Toast.LENGTH_SHORT).show();}
                     });
 
                 }
