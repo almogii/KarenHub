@@ -14,11 +14,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,9 +41,6 @@ public class FirebaseModel{
         db.setFirestoreSettings(settings);
         storage = FirebaseStorage.getInstance();
         auth=FirebaseAuth.getInstance();
-
-
-
     }
 
 
@@ -161,14 +153,12 @@ public class FirebaseModel{
             }
         });
     }
-
-
     public void login(String email, String password, Model.Listener<Boolean> listener) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                      FirebaseUser currUser= auth.getCurrentUser();
+                    CurrUser= auth.getCurrentUser();
                     listener.onComplete(true);
                 }
                 else{listener.onComplete(false);}

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:lineSpacingExtra="20sp"
-            android:text="LogIn"
+            android:text="@string/login"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -35,7 +35,7 @@
                 android:id="@+id/logInEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="email" />
+                android:hint="@string/prompt_email" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,15 +46,21 @@
                 android:id="@+id/logInPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="password" />
+                android:hint="@string/prompt_password" />
         </com.google.android.material.textfield.TextInputLayout>
-
         <Button
             android:id="@+id/login_btn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/login" />
 
+        <TextView
+            android:id="@+id/login_to_signup_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Do not have an account?press here"
+            android:textAlignment="center"
+            android:textSize="20sp" />
     </LinearLayout>
 
 
