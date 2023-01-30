@@ -3,6 +3,7 @@ package com.example.karenhub.model;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Pair;
 
 import androidx.core.os.HandlerCompat;
 
@@ -61,8 +62,8 @@ public class Model {
     public void uploadImage(String name, Bitmap bitmap,Listener<String> listener) {
         firebaseModel.uploadImage(name,bitmap,listener);
     }
-     public void signUp(String email,String password,Listener<Boolean> listener){
-        firebaseModel.signUp(email,password,listener);
+     public void signUp(String email,String label,String password,Listener<Pair<Boolean,String>> listener){
+        firebaseModel.signUp(email,label,password,listener);
      }
      public void login(String email,String password,Listener<Boolean> listener){
         firebaseModel.login(email,password,listener);
