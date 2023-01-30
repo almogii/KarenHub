@@ -124,7 +124,6 @@ public class FirebaseModel{
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     if (task.getResult().isEmpty()) {
-
                         auth.createUserWithEmailAndPassword(email, password)
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
@@ -135,6 +134,7 @@ public class FirebaseModel{
                                             db.collection(User.COLLECTION).add(user.toJson()).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentReference> task) {
+
                                                     listener.onComplete(new Pair<>(true, "Sign up success"));
                                                 }
                                             });
@@ -144,7 +144,7 @@ public class FirebaseModel{
                                                 // Email already exists
                                                 listener.onComplete(new Pair<>(false, "Email already exists"));
                                             } else {
-                                                // Other error
+                                                // Other error like connection issue or password under 6 characters / invalid characters
                                                 listener.onComplete(new Pair<>(false, "Sign up failed"));
                                             }
                                         }

@@ -6,25 +6,44 @@
     android:layout_height="wrap_content"
     tools:context=".SignUpActivity">
 
+    <ImageView
+        android:id="@+id/loading_spinner"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="5dp"
+        android:contentDescription="@string/loader"
+        app:layout_constraintBottom_toBottomOf="@id/signup_error"
+        app:layout_constraintEnd_toEndOf="@id/signup_error"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/signup_error"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_loader" />
+
+    <TextView
+        android:id="@+id/signup_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:lineSpacingExtra="20sp"
+        android:textAlignment="center"
+        android:textColor="#CC0000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:lineSpacingExtra="20sp"
-            android:text="signUp"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_error">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -60,14 +79,14 @@
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
 
-                />
+                android:textColorHint="#616161" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/signUpBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="signUp" />
+            android:text="@string/signup" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
