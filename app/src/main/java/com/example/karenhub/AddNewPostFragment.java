@@ -76,7 +76,12 @@ public class AddNewPostFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentAddPostBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
-
+        binding.addLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.mapsFragment,savedInstanceState);
+            }
+        });
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
             String stId = binding.idEt.getText().toString();
