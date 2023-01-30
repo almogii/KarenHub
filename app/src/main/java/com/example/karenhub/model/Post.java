@@ -2,6 +2,7 @@ package com.example.karenhub.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class Post {
     public String imgUrl ="";
     public String details = "";
 
+    @Ignore
     public Post(){
     }
     public Post(String id, String title, String imgUrl, String details) {
