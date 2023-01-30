@@ -28,6 +28,7 @@ public class FirebaseModel{
     FirebaseFirestore db;
     FirebaseStorage storage;
     FirebaseAuth auth;
+    FirebaseUser CurrUser;
 
     FirebaseModel(){
         db = FirebaseFirestore.getInstance();
@@ -37,6 +38,8 @@ public class FirebaseModel{
         db.setFirestoreSettings(settings);
         storage = FirebaseStorage.getInstance();
         auth=FirebaseAuth.getInstance();
+
+
 
     }
 
@@ -106,16 +109,15 @@ public class FirebaseModel{
         });
     }
 
-
-    public void login(String email, String password, Model.Listener<String> listener) {
+    public void login(String email, String password, Model.Listener<Boolean> listener) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    FirebaseUser currUser= auth.getCurrentUser();
-                    listener.onComplete((currUser.getUid()));
+                      FirebaseUser currUser= auth.getCurrentUser();
+                    listener.onComplete(true);
                 }
-                else{listener.onComplete(null);}
+                else{listener.onComplete(false);}
             }
         });
     }

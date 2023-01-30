@@ -64,7 +64,10 @@ public class Model {
      public void signUp(String email,String password,Listener<Boolean> listener){
         firebaseModel.signUp(email,password,listener);
      }
-     public void login(String email,String password,Listener<String> listener){
+     public void login(String email,String password,Listener<Boolean> listener){
         firebaseModel.login(email,password,listener);
      }
+
+
+
 }

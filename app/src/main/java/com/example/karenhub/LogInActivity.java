@@ -37,11 +37,12 @@ public class LogInActivity extends AppCompatActivity {
                 }
                 else{
                     Model.instance().login(email,password,isValid->{
-                        if (!isValid.isEmpty()&&isValid.contains(email)) {
-                            Toast.makeText(LogInActivity.this, " not null", Toast.LENGTH_SHORT).show();
+                        if (!isValid) {
+                            Toast.makeText(LogInActivity.this, "user not exist", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        if(isValid==email){
-                            Toast.makeText(LogInActivity.this, "user has been registered", Toast.LENGTH_SHORT).show();
+                        if(isValid){
+                            Toast.makeText(LogInActivity.this, "user has been logged in", Toast.LENGTH_SHORT).show();
                             i = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(i);
                             return;

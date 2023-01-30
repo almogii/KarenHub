@@ -1,7 +1,6 @@
 package com.example.karenhub;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,7 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         editTextemail=findViewById(R.id.email);
         editTextpassword=findViewById(R.id.password);
-        editTextaccLabel=findViewById(R.id.AccLabel);
+//        editTextaccLabel=findViewById(R.id.AccLabel);
 
         editTextpassword.setTransformationMethod(new PasswordTransformationMethod());
         SignUpBtn =findViewById(R.id.signUpBtn);
