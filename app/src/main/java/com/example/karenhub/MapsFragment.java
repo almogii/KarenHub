@@ -15,14 +15,15 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.appcompat.widget.SearchView;
 
-import com.example.karenhub.databinding.FragmentMapsBinding;
-import com.google.android.gms.internal.location.zzas;
-import com.google.android.gms.location.FusedLocationProviderClient;
+
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,44 +33,69 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.location.FusedLocationProviderClient;
 
 import java.io.IOException;
 import java.util.List;
 
-public class MapsFragment extends Fragment  implements OnMapReadyCallback{
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
+    private static final int REQUEST_LOCATION_PERMISSION_CODE = 1;
     private MapView mMapView;
     SearchView searchView;
     GoogleMap map;
     Geocoder geocoder;
     private Boolean locationPermissionGranted = false;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=1234;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234;
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     private Location lastKnownLocation;
-      private FusedLocationProviderClient fusedLocationProviderClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private static final float DEFAULT_ZOOM = 15f;
 
     @Override
-        public void onMapReady(GoogleMap map) {
-            this.map=map;
-            if(locationPermissionGranted){
-                getDeviceLocation();
-                updateLocationUI();
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    return;
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
 
-                }
-                map.setMyLocationEnabled(true);
-                map.getUiSettings().setMyLocationButtonEnabled(false);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        geocoder = new Geocoder(getContext());
 
-            }
-
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getCurrentLocation();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION_CODE);
         }
+    }
+
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                        if (addresses.size() > 0) {
+                            String address = addresses.get(0).getAddressLine(0);
+                            String city = addresses.get(0).getLocality();
+                            String state = addresses.get(0).getAdminArea();
+                            String country = addresses.get(0).getCountryName();
+                            String postalCode = addresses.get(0).getPostalCode();
+                            Log.d("Location: ", address + ", " + city + ", " + state + ", " + country + ", " + postalCode);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
 
     private void getDeviceLocation() {
         try {
@@ -202,14 +228,4 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
         super.onStop();
         mMapView.onStop();
     }
-
-
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//
-//        }
-//    }
-
 }
