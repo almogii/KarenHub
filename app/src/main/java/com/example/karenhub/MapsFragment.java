@@ -18,7 +18,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 
 import com.example.karenhub.databinding.FragmentMapsBinding;
 import com.google.android.gms.internal.location.zzas;
@@ -45,6 +45,8 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
     private Boolean locationPermissionGranted = false;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=1234;
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
     private Location lastKnownLocation;
       private FusedLocationProviderClient fusedLocationProviderClient;
     private static final float DEFAULT_ZOOM = 15f;
@@ -64,7 +66,7 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
                 }
                 map.setMyLocationEnabled(true);
                 map.getUiSettings().setMyLocationButtonEnabled(false);
-                init();
+
             }
 
         }
@@ -73,11 +75,10 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(
@@ -85,12 +86,8 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
                                                 lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                             }
                         } else {
-                            LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                            Criteria criteria = new Criteria();
-
-                            String bestProvider = locationManager.getBestProvider(criteria, true);
                             map.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                                    .newLatLngZoom(new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                             map.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }
@@ -141,7 +138,7 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
                     getLocationPermission();
                 }
             } catch (SecurityException e)  {
-                Log.e("Exception: %s", e.getMessage());
+
             }
         }
 
@@ -155,7 +152,10 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
         mMapView = nView.findViewById(R.id.map);
         searchView = nView.findViewById(R.id.idSearchView);
         geocoder = new Geocoder(getContext());
-
+        if (savedInstanceState != null) {
+            lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            map.moveCamera(savedInstanceState.getParcelable(KEY_CAMERA_POSITION));
+        }
         initGoogleMap(savedInstanceState);
         return nView;
     }
@@ -173,6 +173,10 @@ public class MapsFragment extends Fragment  implements OnMapReadyCallback{
         super.onSaveInstanceState(outState);
 
         Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
+        if(map!=null){
+            outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
+            outState.putParcelable(KEY_LOCATION, lastKnownLocation);
+        }
         if (mapViewBundle == null) {
             mapViewBundle = new Bundle();
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
