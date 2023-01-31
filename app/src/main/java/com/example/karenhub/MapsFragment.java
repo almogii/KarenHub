@@ -78,6 +78,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM), 2000,null);
+                }
+                /*if (location != null) {
                     try {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                         if (addresses.size() > 0) {
@@ -91,7 +96,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
             }
         });
     }
