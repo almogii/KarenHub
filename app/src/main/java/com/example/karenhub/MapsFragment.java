@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.appcompat.widget.SearchView;
 
@@ -58,10 +59,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
         geocoder = new Geocoder(getContext());
-
+        init();
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
         } else {
@@ -183,12 +183,40 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         mMapView = nView.findViewById(R.id.map);
         searchView = nView.findViewById(R.id.idSearchView);
         geocoder = new Geocoder(getContext());
+
         if (savedInstanceState != null) {
             lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             map.moveCamera(savedInstanceState.getParcelable(KEY_CAMERA_POSITION));
         }
         initGoogleMap(savedInstanceState);
         return nView;
+    }
+    private void init(){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String location = searchView.getQuery().toString();
+                List<Address> addressList = null;
+                if (location != null || location.equals("")) {
+                    Geocoder geocoder = new Geocoder(getContext());
+                        try {
+                            addressList = geocoder.getFromLocationName(location, 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    Address address = addressList.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    map.addMarker(new MarkerOptions().position(latLng).title(location));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                }
+                    return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
     private void initGoogleMap(Bundle savedInstanceState) {
         Bundle mapViewBundle = null;
