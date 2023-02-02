@@ -46,9 +46,8 @@ public class PostsListFragment extends Fragment {
             }
         });
 
-        View addButton = view.findViewById(R.id.btnAdd);
-        NavDirections action = PostsListFragmentDirections.actionGlobalAddPostFragment();
-        addButton.setOnClickListener(Navigation.createNavigateOnClickListener(action));
+
+
 
         return view;
     }

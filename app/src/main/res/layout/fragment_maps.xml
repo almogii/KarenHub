@@ -19,4 +19,5 @@
         android:elevation="5dp"
         app:iconifiedByDefault="false"
         app:queryHint="Search Here" />
+
 </fragment>

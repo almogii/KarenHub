@@ -5,56 +5,59 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import android.Manifest;
-import android.content.Context;
+import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-
 import androidx.appcompat.widget.SearchView;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
-
-import com.google.android.gms.location.LocationServices;
+import com.example.karenhub.databinding.FragmentMapsBinding;
+import  com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.FusedLocationProviderClient;
-
 import java.io.IOException;
 import java.util.List;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+
+public class MapsFragment extends Fragment implements OnMapReadyCallback  {
+
     private static final int REQUEST_LOCATION_PERMISSION_CODE = 1;
-    private MapView mMapView;
-    SearchView searchView;
-    GoogleMap map;
-    Geocoder geocoder;
-    private Boolean locationPermissionGranted = false;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234;
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
+    private static final float DEFAULT_ZOOM = 15f;
+    //Data.M
+    private MapView mMapView;
+    private SearchView searchView;
+    private GoogleMap map;
+     Geocoder geocoder;
+    LatLng latLng;
+    private Boolean locationPermissionGranted = false;
     private Location lastKnownLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private static final float DEFAULT_ZOOM = 15f;
+    FragmentMapsBinding binding;
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -85,13 +88,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 /*if (location != null) {
                     try {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        if (addresses.size() > 0) {
-                            String address = addresses.get(0).getAddressLine(0);
-                            String city = addresses.get(0).getLocality();
-                            String state = addresses.get(0).getAdminArea();
-                            String country = addresses.get(0).getCountryName();
-                            String postalCode = addresses.get(0).getPostalCode();
-                            Log.d("Location: ", address + ", " + city + ", " + state + ", " + country + ", " + postalCode);
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -179,16 +176,22 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-     View   nView= inflater.inflate(R.layout.fragment_maps, container, false);
+//     View   nView= inflater.inflate(R.layout.fragment_maps, container, false);
+        geocoder = new Geocoder(getContext());
+        binding=FragmentMapsBinding.inflate(inflater,container,false);
+        View nView=binding.getRoot();
         mMapView = nView.findViewById(R.id.map);
         searchView = nView.findViewById(R.id.idSearchView);
-        geocoder = new Geocoder(getContext());
-
         if (savedInstanceState != null) {
             lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             map.moveCamera(savedInstanceState.getParcelable(KEY_CAMERA_POSITION));
         }
         initGoogleMap(savedInstanceState);
+        binding.idSearchView.setOnClickListener(view -> {
+            NavDirections action = MapsFragmentDirections.actionMapsFragmentToAddNewPostFragment(latLng);
+            Navigation.findNavController(view).navigate(action);
+
+        });
         return nView;
     }
     private void init(){
@@ -205,15 +208,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                             e.printStackTrace();
                         }
                     Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                     latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                     Log.d("cordinateCheck",latLng.toString());
                     map.addMarker(new MarkerOptions().position(latLng).title(location));
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+
                 }
                     return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+
                 return false;
             }
         });
@@ -225,6 +232,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
         mMapView.onCreate(mapViewBundle);
         mMapView.getMapAsync(this);
+
     }
 
     @Override
@@ -244,6 +252,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onSaveInstanceState(mapViewBundle);
     }
 
+
+
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -261,4 +273,5 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         super.onStop();
         mMapView.onStop();
     }
+
 }

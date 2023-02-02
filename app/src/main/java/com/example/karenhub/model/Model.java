@@ -7,6 +7,8 @@ import android.util.Pair;
 
 import androidx.core.os.HandlerCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,6 +31,11 @@ public class Model {
     public interface Listener<T>{
         void onComplete(T data);
     }
+    public FirebaseAuth getAuth() {
+        return firebaseModel.auth;
+    }
+
+
     public void getAllPosts(Listener<List<Post>> callback){
         firebaseModel.getAllPosts(callback);
 //        executor.execute(()->{

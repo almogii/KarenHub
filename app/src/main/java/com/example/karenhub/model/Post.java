@@ -16,21 +16,24 @@ public class Post {
     public String title ="";
     public String imgUrl ="";
     public String details = "";
+    public String location="";
 
     @Ignore
     public Post(){
     }
-    public Post(String id, String title, String imgUrl, String details) {
+    public Post(String id, String title, String imgUrl, String details,String location) {
         this.title = title;
         this.id = id;
         this.imgUrl = imgUrl;
         this.details = details;
+        this.location=location;
     }
 
     static final String TITLE = "title";
     static final String ID = "id";
     static final String IMAGE = "image";
     static final String DETAILS = "details";
+    static final String LOCATION = "location";
     static final String COLLECTION = "posts";
 
     public static Post fromJson(Map<String,Object> json){
@@ -38,7 +41,8 @@ public class Post {
         String name = (String)json.get(TITLE);
         String image = (String)json.get(IMAGE);
         String details = (String) json.get(DETAILS);
-        Post post = new Post(id,name,image,details);
+        String location=(String)json.get(LOCATION) ;
+        Post post = new Post(id,name,image,details,location);
         return post;
     }
 
@@ -48,6 +52,7 @@ public class Post {
         json.put(TITLE, getTitle());
         json.put(IMAGE, getImgUrl());
         json.put(DETAILS, getDetails());
+        json.put(LOCATION,getLocation());
         return json;
     }
 
@@ -86,4 +91,8 @@ public class Post {
     public String getDetails() {
         return details;
     }
+    public String getLocation() {
+        return location;
+    }
+
 }

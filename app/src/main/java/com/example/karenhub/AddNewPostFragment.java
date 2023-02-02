@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,9 +28,12 @@ import android.widget.Toast;
 import com.example.karenhub.databinding.FragmentAddPostBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
+import com.google.android.gms.maps.model.LatLng;
 
-public class AddNewPostFragment extends Fragment {
+public class AddNewPostFragment extends Fragment  {
     FragmentAddPostBinding binding;
+    LatLng location;
+    Double x,y;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
 
@@ -76,6 +80,13 @@ public class AddNewPostFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentAddPostBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
+        location=getArguments().getParcelable("Address1");
+
+            if(location!=null){
+                binding.address.setText(location.toString());
+
+            }
+
         binding.addLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +96,10 @@ public class AddNewPostFragment extends Fragment {
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
             String stId = binding.idEt.getText().toString();
-            Post post = new Post(stId,name,"","");
+            String address= binding.address.getText().toString();
+            Log.d("L1",address);
+
+            Post post = new Post(stId,name,"","",address);
             if (name.equals("")||stId.equals("")){
                 Toast.makeText(getContext(),"missing name or ID",Toast.LENGTH_LONG).show();
             }
@@ -104,21 +118,20 @@ public class AddNewPostFragment extends Fragment {
                 });
             }else {
                 Model.instance().addPost(post, (unused) -> {
-                    Navigation.findNavController(view1).popBackStack();
+//                    Navigation.findNavController(view1).popBackStack();
+                    Navigation.findNavController(view1).navigate(R.id.postsListFragment);
                 });
             }
             }
         });
-
         binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postsListFragment,false));
-
         binding.cameraButton.setOnClickListener(view1->{
             cameraLauncher.launch(null);
         });
-
         binding.galleryButton.setOnClickListener(view1->{
             galleryLauncher.launch("media/*");
         });
+
         return view;
     }
 
