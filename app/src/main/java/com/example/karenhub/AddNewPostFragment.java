@@ -30,17 +30,35 @@ import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
 import com.google.android.gms.maps.model.LatLng;
 
-public class AddNewPostFragment extends Fragment  {
+public class AddNewPostFragment extends Fragment {
     FragmentAddPostBinding binding;
     LatLng location;
-    Double x,y;
+    String locationName;
+    Double x, y;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
 
     Boolean isAvatarSelected = false;
+
+    public static AddNewPostFragment newInstance(LatLng location, String locationName) {
+        AddNewPostFragment newPostFragment = new AddNewPostFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("location", location);
+        bundle.putString("locationName", locationName);
+        newPostFragment.setArguments(bundle);
+        return newPostFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+        if (!bundle.isEmpty()) {
+            this.location = bundle.getParcelable("location");
+            this.locationName = bundle.getString("locationName");
+        }
+
         FragmentActivity parentActivity = getActivity();
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
@@ -52,7 +70,7 @@ public class AddNewPostFragment extends Fragment  {
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 return false;
             }
-        },this, Lifecycle.State.RESUMED);
+        }, this, Lifecycle.State.RESUMED);
 
         cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), new ActivityResultCallback<Bitmap>() {
             @Override
@@ -66,7 +84,7 @@ public class AddNewPostFragment extends Fragment  {
         galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
             @Override
             public void onActivityResult(Uri result) {
-                if (result != null){
+                if (result != null) {
                     binding.avatarImg.setImageURI(result);
                     isAvatarSelected = true;
                 }
@@ -78,57 +96,52 @@ public class AddNewPostFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentAddPostBinding.inflate(inflater,container,false);
+        binding = FragmentAddPostBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        location=getArguments().getParcelable("Address1");
-
-            if(location!=null){
-                binding.address.setText(location.toString());
-
-            }
+        if (this.locationName != null) {
+            binding.address.setText(locationName);
+        }
 
         binding.addLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.mapsFragment,savedInstanceState);
+                Navigation.findNavController(view).navigate(R.id.mapsFragment, savedInstanceState);
             }
         });
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
             String stId = binding.idEt.getText().toString();
-            String address= binding.address.getText().toString();
-            Log.d("L1",address);
+            String address = binding.address.getText().toString();
+            Log.d("L1", address);
 
-            Post post = new Post(stId,name,"","",address);
-            if (name.equals("")||stId.equals("")){
-                Toast.makeText(getContext(),"missing name or ID",Toast.LENGTH_LONG).show();
-            }
-            else{
-            if (isAvatarSelected){
-                binding.avatarImg.setDrawingCacheEnabled(true);
-                binding.avatarImg.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
-                Model.instance().uploadImage(stId, bitmap, url->{
-                    if (url != null){
-                        post.setImgUrl(url);
-                    }
-                    Model.instance().addPost(post, (unused) -> {
-                        Navigation.findNavController(view1).popBackStack();
+            Post post = new Post(stId, name, "", "", address);
+            if (name.equals("") || stId.equals("")) {
+                Toast.makeText(getContext(), "missing name or ID", Toast.LENGTH_LONG).show();
+            } else {
+                if (isAvatarSelected) {
+                    binding.avatarImg.setDrawingCacheEnabled(true);
+                    binding.avatarImg.buildDrawingCache();
+                    Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+                    Model.instance().uploadImage(stId, bitmap, url -> {
+                        if (url != null) {
+                            post.setImgUrl(url);
+                        }
+                        Model.instance().addPost(post, (unused) -> {
+                            Navigation.findNavController(view1).popBackStack();
+                        });
                     });
-                });
-            }else {
-                Model.instance().addPost(post, (unused) -> {
-//                    Navigation.findNavController(view1).popBackStack();
-                    Navigation.findNavController(view1).navigate(R.id.postsListFragment);
-                });
-            }
+                } else {
+                    Model.instance().addPost(post, (unused) -> {
+                        Navigation.findNavController(view1).navigate(R.id.postsListFragment);
+                    });
+                }
             }
         });
-        binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postsListFragment,false));
-        binding.cameraButton.setOnClickListener(view1->{
+        binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postsListFragment, false));
+        binding.cameraButton.setOnClickListener(view1 -> {
             cameraLauncher.launch(null);
         });
-        binding.galleryButton.setOnClickListener(view1->{
+        binding.galleryButton.setOnClickListener(view1 -> {
             galleryLauncher.launch("media/*");
         });
 

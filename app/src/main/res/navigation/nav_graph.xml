@@ -32,8 +32,11 @@
             android:id="@+id/action_addNewPostFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
         <argument
-            android:name="Address1"
+            android:name="location"
             app:argType="com.google.android.gms.maps.model.LatLng" />
+        <argument
+            android:name="locationName"
+            app:argType="string" />
     </fragment>
     <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addNewPostFragment" />
     <fragment
@@ -44,11 +47,8 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.karenhub.MapsFragment"
-        android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" >
-        <argument
-            android:name="Address1"
-            app:argType="com.google.android.gms.maps.model.LatLng" />
+        android:label="@string/fragment_maps"
+        tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_addNewPostFragment"
             app:destination="@id/addNewPostFragment" />

@@ -5,25 +5,31 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
 import android.Manifest;
-import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.karenhub.databinding.FragmentMapsBinding;
-import  com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -34,11 +40,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
+
 import java.io.IOException;
 import java.util.List;
 
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback  {
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int REQUEST_LOCATION_PERMISSION_CODE = 1;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234;
@@ -47,21 +56,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
     private static final String KEY_LOCATION = "location";
     private static final float DEFAULT_ZOOM = 15f;
     //Data.M
+    private MapsFragmentModel mapsFragmentModel;
     private MapView mMapView;
     private SearchView searchView;
+    private MaterialButton currentLocBtn;
     private GoogleMap map;
-     Geocoder geocoder;
-    LatLng latLng;
+    Geocoder geocoder;
     private Boolean locationPermissionGranted = false;
     private Location lastKnownLocation;
+    private LatLng lastLatLng;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private Bundle savedInstanceState;
     FragmentMapsBinding binding;
-
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
         geocoder = new Geocoder(getContext());
         init();
@@ -69,6 +81,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
             getCurrentLocation();
         } else {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION_CODE);
+            getCurrentLocation();
         }
     }
 
@@ -81,50 +94,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    map.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM), 2000,null);
+                    lastLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLng(lastLatLng));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM), 2000, null);
                 }
-                /*if (location != null) {
-                    try {
-                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }*/
             }
         });
     }
 
-
-    private void getDeviceLocation() {
-        try {
-            if (locationPermissionGranted) {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            lastKnownLocation = task.getResult();
-                            if (lastKnownLocation != null) {
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(lastKnownLocation.getLatitude(),
-                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            }
-                        } else {
-                            map.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            map.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e)  {
-
-        }
-    }
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(getContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -136,6 +113,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -154,21 +132,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
     }
 
     private void updateLocationUI() {
-            if (map == null) {return;}
-            try {
-                if (locationPermissionGranted) {
-                    map.setMyLocationEnabled(true);
-                    map.getUiSettings().setMyLocationButtonEnabled(true);
-                } else {
-                    map.setMyLocationEnabled(false);
-                    map.getUiSettings().setMyLocationButtonEnabled(false);
-                    lastKnownLocation = null;
-                    getLocationPermission();
-                }
-            } catch (SecurityException e)  {
-
-            }
+        if (map == null) {
+            return;
         }
+        try {
+            if (locationPermissionGranted) {
+                map.setMyLocationEnabled(true);
+                map.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                map.setMyLocationEnabled(false);
+                map.getUiSettings().setMyLocationButtonEnabled(false);
+                lastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e) {
+
+        }
+    }
 
 
     @Nullable
@@ -177,44 +157,62 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 //     View   nView= inflater.inflate(R.layout.fragment_maps, container, false);
-        geocoder = new Geocoder(getContext());
-        binding=FragmentMapsBinding.inflate(inflater,container,false);
-        View nView=binding.getRoot();
+
+        binding = FragmentMapsBinding.inflate(inflater, container, false);
+        View nView = binding.getRoot();
+
         mMapView = nView.findViewById(R.id.map);
         searchView = nView.findViewById(R.id.idSearchView);
+        this.savedInstanceState = savedInstanceState;
+        currentLocBtn = nView.findViewById(R.id.current_loc_btn);
         if (savedInstanceState != null) {
             lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
-            map.moveCamera(savedInstanceState.getParcelable(KEY_CAMERA_POSITION));
+            map.moveCamera(this.savedInstanceState.getParcelable(KEY_CAMERA_POSITION));
         }
-        initGoogleMap(savedInstanceState);
-        binding.idSearchView.setOnClickListener(view -> {
-            NavDirections action = MapsFragmentDirections.actionMapsFragmentToAddNewPostFragment(latLng);
+        initGoogleMap(this.savedInstanceState);
+        /*binding.idSearchView.setOnClickListener(view -> {
+            NavDirections action = MapsFragmentDirections.actionMapsFragmentToAddNewPostFragment(lastLatLng);
             Navigation.findNavController(view).navigate(action);
 
-        });
+        });*/
         return nView;
     }
-    private void init(){
+
+    private void init() {
+
+        map.setOnMapClickListener((map_click) -> {
+            lastLatLng = new LatLng(map_click.latitude, map_click.longitude);
+            String locationName = lastLatLng.toString();
+            try {
+                List<Address> address = geocoder.getFromLocation(map_click.latitude, map_click.longitude, 1);
+                if (address.size() >= 1) {
+                    locationName = address.get(0).getAddressLine(0);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            changeMarker(locationName);
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String location = searchView.getQuery().toString();
-                List<Address> addressList = null;
-                if (location != null || location.equals("")) {
-                    Geocoder geocoder = new Geocoder(getContext());
-                        try {
-                            addressList = geocoder.getFromLocationName(location, 1);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    Address address = addressList.get(0);
-                     latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                     Log.d("cordinateCheck",latLng.toString());
-                    map.addMarker(new MarkerOptions().position(latLng).title(location));
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-
+                List<Address> addressList;
+                Geocoder geocoder = new Geocoder(getContext());
+                try {
+                    addressList = geocoder.getFromLocationName(location, 1);
+                    if (addressList.size() >= 1) {
+                        Address address = addressList.get(0);
+                        lastLatLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        changeMarker(address.getAddressLine(0));
+                    } else {
+                        Toast.makeText(getContext(), "Location Not Found", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                    return false;
+
+                return false;
             }
 
             @Override
@@ -224,7 +222,36 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
                 return false;
             }
         });
+        currentLocBtn.setOnClickListener((btn_click) -> {
+            getCurrentLocation();
+            String locationName = lastLatLng.toString();
+            try {
+                List<Address> address = geocoder.getFromLocation(lastLatLng.latitude, lastLatLng.longitude, 1);
+                if (address.size() >= 1) {
+                    locationName = address.get(0).getAddressLine(0);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            changeMarker(locationName);
+        });
     }
+
+    private void changeMarker(String title) {
+        map.clear();
+        map.addMarker(new MarkerOptions().position(lastLatLng).title(title));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatLng, DEFAULT_ZOOM));
+        MarkerOptions marker = new MarkerOptions()
+                .position(lastLatLng)
+                .title(title);
+        map.clear();
+        map.addMarker(marker);
+        savedInstanceState = new Bundle();
+        savedInstanceState.putParcelable("location", lastLatLng);
+        savedInstanceState.putString("locationName", title);
+        this.mapsFragmentModel.setSavedInstanceStateData(savedInstanceState);
+    }
+
     private void initGoogleMap(Bundle savedInstanceState) {
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
@@ -232,7 +259,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
         }
         mMapView.onCreate(mapViewBundle);
         mMapView.getMapAsync(this);
+    }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+        this.mapsFragmentModel = viewModelProvider.get(MapsFragmentModel.class);
     }
 
     @Override
@@ -240,9 +273,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
         super.onSaveInstanceState(outState);
 
         Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
-        if(map!=null){
+        if (map != null) {
             outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
-            outState.putParcelable(KEY_LOCATION, lastKnownLocation);
+            outState.putParcelable(KEY_LOCATION, lastLatLng);
         }
         if (mapViewBundle == null) {
             mapViewBundle = new Bundle();
@@ -251,10 +284,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback  {
 
         mMapView.onSaveInstanceState(mapViewBundle);
     }
-
-
-
-
 
     @Override
     public void onResume() {
