@@ -51,6 +51,7 @@
         tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_addNewPostFragment"
-            app:destination="@id/addNewPostFragment" />
+            app:destination="@id/addNewPostFragment"
+            app:popUpTo="@id/postsListFragment" />
     </fragment>
 </navigation>
