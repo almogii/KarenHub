@@ -22,6 +22,9 @@
         <argument
             android:name="blueTitle"
             app:argType="string" />
+        <argument
+            android:name="postDetails"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/addNewPostFragment"

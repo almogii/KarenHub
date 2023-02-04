@@ -64,7 +64,7 @@
                 app:startIconDrawable="@drawable/ic_baseline_edit_calendar_24">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/idEt"
+                    android:id="@+id/post_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="post title" />
@@ -80,7 +80,7 @@
                 app:startIconDrawable="@drawable/ic_baseline_edit_calendar_24">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/nameEt"
+                    android:id="@+id/post_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="post description" />

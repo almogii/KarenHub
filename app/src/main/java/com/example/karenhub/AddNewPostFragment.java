@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -109,20 +108,21 @@ public class AddNewPostFragment extends Fragment {
             }
         });
         binding.saveBtn.setOnClickListener(view1 -> {
-            String name = binding.nameEt.getText().toString();
-            String stId = binding.idEt.getText().toString();
-            String address = binding.address.getText().toString();
-            Log.d("L1", address);
 
-            Post post = new Post(stId, name, "", "", address);
-            if (name.equals("") || stId.equals("")) {
-                Toast.makeText(getContext(), "missing name or ID", Toast.LENGTH_LONG).show();
+            String title = binding.postTitle.getText().toString();
+            String details = binding.postDes.getText().toString();
+            String location = binding.address.getText().toString();
+            String label=getActivity().getPreferences(getContext().MODE_PRIVATE).getString("user","label");
+
+            Post post = new Post(title,title, "", details,  location,label);
+            if (details.equals("") || title.equals("")) {
+                Toast.makeText(getContext(), "missing title or details ", Toast.LENGTH_LONG).show();
             } else {
                 if (isAvatarSelected) {
                     binding.avatarImg.setDrawingCacheEnabled(true);
                     binding.avatarImg.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
-                    Model.instance().uploadImage(stId, bitmap, url -> {
+                    Model.instance().uploadImage(title, bitmap, url -> {
                         if (url != null) {
                             post.setImgUrl(url);
                         }

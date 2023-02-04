@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/postlistrow_avatar_img"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="81dp"
+        android:layout_height="83dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"

@@ -97,19 +97,6 @@ public class FirebaseModel{
         });
     }
 
-    /*public void signUp(String email,String label, String password, Model.Listener<Boolean> listener) {
-
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    listener.onComplete(true);
-                }
-                else{listener.onComplete(false);}
-            }
-        });
-    }*/
-
     public void signUp(String email, String label, String password, Model.Listener<Pair<Boolean,String>> listener) {
         db.collection(User.COLLECTION).whereEqualTo(User.ACCOUNT_LABEL, label).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

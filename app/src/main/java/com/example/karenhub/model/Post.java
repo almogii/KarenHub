@@ -1,5 +1,7 @@
 package com.example.karenhub.model;
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -17,19 +19,22 @@ public class Post {
     public String imgUrl ="";
     public String details = "";
     public String location="";
-
+    public String label="";
     @Ignore
     public Post(){
     }
-    public Post(String id, String title, String imgUrl, String details,String location) {
+    public Post(String id, String title, String imgUrl, String details,String location, String label) {
         this.title = title;
         this.id = id;
         this.imgUrl = imgUrl;
         this.details = details;
         this.location=location;
+        this.label=label;
+
     }
 
     static final String TITLE = "title";
+    static final String LABEL = "label";
     static final String ID = "id";
     static final String IMAGE = "image";
     static final String DETAILS = "details";
@@ -38,11 +43,12 @@ public class Post {
 
     public static Post fromJson(Map<String,Object> json){
         String id = (String)json.get(ID);
+        String label = (String)json.get(LABEL);
         String name = (String)json.get(TITLE);
         String image = (String)json.get(IMAGE);
         String details = (String) json.get(DETAILS);
         String location=(String)json.get(LOCATION) ;
-        Post post = new Post(id,name,image,details,location);
+        Post post = new Post(id,name,image,details,location,label);
         return post;
     }
 
@@ -53,6 +59,8 @@ public class Post {
         json.put(IMAGE, getImgUrl());
         json.put(DETAILS, getDetails());
         json.put(LOCATION,getLocation());
+        json.put(LABEL,getLabel());
+
         return json;
     }
 
@@ -79,20 +87,21 @@ public class Post {
     public String getId() {
         return id;
     }
-
     public String getTitle() {
         return title;
     }
-
     public String getImgUrl() {
         return imgUrl;
     }
-
     public String getDetails() {
         return details;
     }
     public String getLocation() {
         return location;
     }
+    public String getLabel() {
+        return label;
+    }
+
 
 }
