@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.karenhub.model.Model;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
 
@@ -22,6 +23,7 @@ public class LogInActivity extends AppCompatActivity {
     TextView toSignUp;
     Button LogIn_btn;
     Intent i;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,14 @@ public class LogInActivity extends AppCompatActivity {
         LogIn_password=findViewById(R.id.logInPassword);
         LogIn_btn=findViewById(R.id.login_btn1);
         toSignUp=findViewById(R.id.login_to_signup_tv);
-        toSignUp.setOnClickListener(new View.OnClickListener() {
+        user=Model.instance().getAuth().getCurrentUser();
+        if (user != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
+            toSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 i = new Intent(getApplicationContext(), SignUpActivity.class);

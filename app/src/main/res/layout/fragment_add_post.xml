@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="false"
     tools:context=".AddNewPostFragment">
 
     <ScrollView
@@ -14,7 +15,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -26,15 +27,9 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_dialog_map" />
-
-                <ImageView
                     android:id="@+id/avatarImg"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="238dp"
                     android:layout_marginTop="8dp"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/avatar"
@@ -69,11 +64,10 @@
                 app:startIconDrawable="@drawable/ic_baseline_edit_calendar_24">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/idEt"
+                    android:id="@+id/post_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="post title"
-                    android:text="post title" />
+                    android:hint="post title" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -86,39 +80,75 @@
                 app:startIconDrawable="@drawable/ic_baseline_edit_calendar_24">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/nameEt"
+                    android:id="@+id/post_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="post description" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:clickable="false"
+                app:startIconDrawable="@drawable/ic_baseline_edit_calendar_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="address"
+                    android:textColor="#666666" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayoutCompat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/addLocation_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="add location" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="add location"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/saveBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/saveBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:text="SAVE" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="SAVE"
+                    app:layout_constraintBottom_toBottomOf="@+id/addLocation_btn"
+                    app:layout_constraintEnd_toStartOf="@+id/cancellBtn"
+                    app:layout_constraintStart_toEndOf="@+id/addLocation_btn"
+                    app:layout_constraintTop_toTopOf="@+id/addLocation_btn" />
 
                 <Button
                     android:id="@+id/cancellBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:text="CANCEL" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="CANCEL"
+                    app:layout_constraintBottom_toBottomOf="@+id/saveBtn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/saveBtn"
+                    app:layout_constraintTop_toTopOf="@+id/saveBtn" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>

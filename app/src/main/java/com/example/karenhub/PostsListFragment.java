@@ -33,7 +33,7 @@ public class PostsListFragment extends Fragment {
 
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PostRecyclerAdapter(getLayoutInflater(),viewModel.getData());
+        adapter = new PostRecyclerAdapter(getLayoutInflater(), viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new PostRecyclerAdapter.OnItemClickListener() {
@@ -41,14 +41,12 @@ public class PostsListFragment extends Fragment {
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
                 Post st = viewModel.getData().get(pos);
-                PostsListFragmentDirections.ActionPostsListFragmentToBlueFragment action = PostsListFragmentDirections.actionPostsListFragmentToBlueFragment(st.title);
+                PostsListFragmentDirections.ActionPostsListFragmentToBlueFragment action =
+                        PostsListFragmentDirections.actionPostsListFragmentToBlueFragment(st.title,st.details);
                 Navigation.findNavController(view).navigate((NavDirections) action);
             }
         });
 
-        View addButton = view.findViewById(R.id.btnAdd);
-        NavDirections action = PostsListFragmentDirections.actionGlobalAddPostFragment();
-        addButton.setOnClickListener(Navigation.createNavigateOnClickListener(action));
 
         return view;
     }
@@ -65,9 +63,9 @@ public class PostsListFragment extends Fragment {
         reloadData();
     }
 
-    void reloadData(){
+    void reloadData() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        Model.instance().getAllPosts((stList)->{
+        Model.instance().getAllPosts((stList) -> {
             viewModel.setData(stList);
             adapter.setData(viewModel.getData());
             binding.progressBar.setVisibility(View.GONE);
