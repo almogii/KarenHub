@@ -4,30 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1601FE"
+    android:background="@color/white"
     tools:context=".BlueFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:id="@+id/bluefrag_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="@string/date"
+        android:text="title"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/postUrl_blueFrag" />
 
     <Button
         android:id="@+id/bluefrag_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:text="Button"
+        android:text="back to list"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postLocation" />
+
+    <TextView
+        android:id="@+id/postDetails_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bluefrag_title_tv" />
+
+    <TextView
+        android:id="@+id/postLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postDetails_tv" />
+
+    <ImageView
+        android:id="@+id/postUrl_blueFrag"
+        android:layout_width="350dp"
+        android:layout_height="250dp"
+        android:src="@drawable/avatar"
+        app:layout_constraintBottom_toTopOf="@+id/bluefrag_title_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

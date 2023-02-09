@@ -114,6 +114,7 @@ public class AddNewPostFragment extends Fragment {
             String title = binding.postTitle.getText().toString();
             String details = binding.postDes.getText().toString();
             String location = binding.address.getText().toString();
+
             String label=sp.getString("label","");
 
             Post post = new Post(title,title, "", details,  location,label);

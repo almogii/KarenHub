@@ -63,26 +63,18 @@ public class Post {
 
         return json;
     }
-
-
-
-
     public void setId(@NonNull String id) {
         this.id = id;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-
     public void setDetails(String details) {
         this.details = details;
     }
-
     @NonNull
     public String getId() {
         return id;

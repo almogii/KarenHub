@@ -20,10 +20,19 @@
         android:label="fragment_blue"
         tools:layout="@layout/fragment_blue" >
         <argument
-            android:name="blueTitle"
+            android:name="postTitle"
             app:argType="string" />
         <argument
             android:name="postDetails"
+            app:argType="string" />
+        <argument
+            android:name="postLocInfo"
+            app:argType="string" />
+        <argument
+            android:name="postLabel"
+            app:argType="string" />
+        <argument
+            android:name="PostImgUrl"
             app:argType="string" />
     </fragment>
     <fragment

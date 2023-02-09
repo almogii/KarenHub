@@ -70,6 +70,22 @@ public class FirebaseModel{
             }
         });
     }
+    public void getPostById(String id, Model.Listener<Post> listener){
+        db.collection(Post.COLLECTION).whereEqualTo(Post.ID,id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Post post = new Post();
+                if (task.isSuccessful()){
+                    QuerySnapshot jsonsList = task.getResult();
+                    for (DocumentSnapshot json: jsonsList){
+                        post = Post.fromJson(json.getData());
+
+                    }
+                }
+                listener.onComplete(post);
+            }
+        });
+    }
 
     void uploadImage(String name, Bitmap bitmap, Model.Listener<String> listener){
         StorageReference storageRef = storage.getReference();
@@ -77,7 +93,6 @@ public class FirebaseModel{
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-
         UploadTask uploadTask = imagesRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override

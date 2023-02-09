@@ -77,8 +77,10 @@ public class Model {
         firebaseModel.login(email,password,listener);
      }
 
+
      public FirebaseFirestore getDb(){
         return firebaseModel.getDb();
      }
+
 
 }

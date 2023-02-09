@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,13 +13,20 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 public class BlueFragment extends Fragment {
-    TextView titleTv;
+    TextView titleTv,detailsTv,locationTV,imgUrl_Tv;
     String title;
+    String details;
+    String  location;
+    String imgUrl;
 
-    public static BlueFragment newInstance(String title){
+    public static BlueFragment newInstance(String title,String details,String location,String ImgUrl){
         BlueFragment frag = new BlueFragment();
         Bundle bundle = new Bundle();
         bundle.putString("TITLE",title);
+        bundle.putString("DETAILS",details);
+        bundle.putString("LOCATION",location);
+        bundle.putString("IMAGE",ImgUrl);
+
         frag.setArguments(bundle);
         return frag;
     }
@@ -29,6 +37,10 @@ public class BlueFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null){
             this.title = bundle.getString("TITLE");
+            this.details=bundle.getString("DETAILS");
+            this.location=bundle.getString("LOCATION");
+            this.imgUrl=bundle.getString("IMAGE");
+
         }
     }
 
@@ -37,21 +49,22 @@ public class BlueFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blue, container, false);
-
-        title = BlueFragmentArgs.fromBundle(getArguments()).getBlueTitle();
-
+        //show post details
+        title = BlueFragmentArgs.fromBundle(getArguments()).getPostTitle();
+        details=BlueFragmentArgs.fromBundle(getArguments()).getPostDetails();
+        location=BlueFragmentArgs.fromBundle(getArguments()).getPostLocInfo();
+        imgUrl=BlueFragmentArgs.fromBundle(getArguments()).getPostImgUrl();
         TextView titleTv = view.findViewById(R.id.bluefrag_title_tv);
-        if (title != null){
-            titleTv.setText(title);
-        }
+        if (title != null){titleTv.setText(title);}
+        detailsTv=view.findViewById(R.id.postDetails_tv);
+        if(details!=null){detailsTv.setText(details);}
+        locationTV=view.findViewById(R.id.postLocation);
+        if(location!=null){locationTV.setText(location);}
 
         View button = view.findViewById(R.id.bluefrag_back_btn);
-        button.setOnClickListener((view1)->{
-            Navigation.findNavController(view1).popBackStack();
-        });
+        button.setOnClickListener((view1)->{Navigation.findNavController(view1).popBackStack();});
         return view;
     }
-
     public void setTitle(String title) {
         this.title = title;
         if (titleTv != null){
