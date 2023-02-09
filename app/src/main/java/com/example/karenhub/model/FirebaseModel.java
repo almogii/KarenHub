@@ -148,7 +148,7 @@ public class FirebaseModel{
                     CurrUser= auth.getCurrentUser();
                     listener.onComplete(new Pair<>(true,"Logged in successfully"));
                 }
-                else{listener.onComplete(new Pair<>(true,"Login failed"));}
+                else{listener.onComplete(new Pair<>(false,"Login failed"));}
             }
         });
     }
