@@ -98,7 +98,8 @@ public class SignUpActivity extends AppCompatActivity {
                             finish();
                         } else {
                             errorTV.setText(result.second);
-                            Toast.makeText(SignUpActivity.this, result.second, Toast.LENGTH_SHORT).show();
+
+
                         }
                         loaderIV.post(() -> {
                             loaderIV.clearAnimation();

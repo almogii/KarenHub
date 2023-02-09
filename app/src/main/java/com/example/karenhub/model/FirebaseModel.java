@@ -140,15 +140,15 @@ public class FirebaseModel{
             }
         });
     }
-    public void login(String email, String password, Model.Listener<Boolean> listener) {
+    public void login(String email, String password,Model.Listener<Pair<Boolean,String>> listener){
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     CurrUser= auth.getCurrentUser();
-                    listener.onComplete(true);
+                    listener.onComplete(new Pair<>(true,"Logged in successfully"));
                 }
-                else{listener.onComplete(false);}
+                else{listener.onComplete(new Pair<>(true,"Login failed"));}
             }
         });
     }
