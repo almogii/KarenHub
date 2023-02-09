@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class SignUpActivity extends AppCompatActivity {
     TextInputEditText editTextEmail, editTextPassword, editTextAccLabel;
     TextView errorTV;
+    TextView toLogIn;
     ImageView loaderIV;
     Button signUpBtn;
     Intent i;
@@ -34,7 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        setTitle(R.string.signup);
+        toLogIn = findViewById(R.id.signup_to_login_tv);
         sp = getSharedPreferences("user", MODE_PRIVATE);
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -49,6 +50,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         signUpBtn = findViewById(R.id.signUpBtn);
         SignUpListener();
+
+        toLogIn.setOnClickListener((toLogIn)->{backToLogIn();});
     }
 
     private void SignUpListener() {
@@ -56,6 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 errorTV.setText("");
+
                 String password, email, label;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
@@ -94,7 +98,8 @@ public class SignUpActivity extends AppCompatActivity {
                             finish();
                         } else {
                             errorTV.setText(result.second);
-                            Toast.makeText(SignUpActivity.this, result.second, Toast.LENGTH_SHORT).show();
+
+
                         }
                         loaderIV.post(() -> {
                             loaderIV.clearAnimation();
@@ -106,6 +111,21 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backToLogIn();
+    }
+
+    public void backToLogIn(){
+        i = new Intent(getApplicationContext(), LogInActivity.class);
+        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(
+                        getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out)
+                .toBundle();
+        startActivity(i, bundle);
+        finish();
     }
 
     private void LabelChecker() {

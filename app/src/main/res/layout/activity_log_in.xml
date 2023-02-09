@@ -4,7 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login_background2"
     tools:context=".LogInActivity">
+
+    <TextView
+        android:id="@+id/login_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:paddingTop="5dp"
+        android:textSize="28dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -12,55 +25,86 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/login_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/login_text"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:lineSpacingExtra="20sp"
-            android:text="@string/login"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/loading_spinner"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/loader"
+                app:srcCompat="@drawable/ic_loader" />
+
+            <TextView
+                android:id="@+id/login_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:lineSpacingExtra="20sp"
+                android:textAlignment="center"
+                android:textColor="#CC0000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/logInEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/roundstyle"
+                android:backgroundTint="#DFDFDF"
                 android:hint="@string/prompt_email" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/logInPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/roundstyle"
+                android:backgroundTint="#DFDFDF"
+                android:cursorVisible="true"
+                android:inputType="textPassword"
                 android:hint="@string/prompt_password" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/login_btn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login" />
+            android:layout_marginTop="30dp"
+            android:text="@string/login"
+            android:textColor="#ECECEC" />
 
         <TextView
             android:id="@+id/login_to_signup_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Do not have an account?press here"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/roundstyle"
+            android:text="Do not have an account?\npress here"
             android:textAlignment="center"
             android:textSize="20sp" />
+
     </LinearLayout>
 
 
