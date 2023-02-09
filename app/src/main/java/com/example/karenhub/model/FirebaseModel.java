@@ -140,7 +140,8 @@ public class FirebaseModel{
             }
         });
     }
-    public void login(String email, String password,Model.Listener<Pair<Boolean,String>> listener){
+
+    public void login(String email, String password, Model.Listener<Pair<Boolean,String>> listener) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -151,5 +152,9 @@ public class FirebaseModel{
                 else{listener.onComplete(new Pair<>(false,"Login failed"));}
             }
         });
+    }
+
+    public FirebaseFirestore getDb() {
+        return db;
     }
 }

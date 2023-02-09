@@ -1,5 +1,6 @@
 package com.example.karenhub;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +38,7 @@ public class AddNewPostFragment extends Fragment {
     Double x, y;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
-
+    SharedPreferences sp;
     Boolean isAvatarSelected = false;
 
     public static AddNewPostFragment newInstance(LatLng location, String locationName) {
@@ -51,7 +53,7 @@ public class AddNewPostFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        sp = getContext().getSharedPreferences("user",getContext().MODE_PRIVATE);
         Bundle bundle = getArguments();
         if (!bundle.isEmpty()) {
             this.location = bundle.getParcelable("location");
@@ -112,7 +114,7 @@ public class AddNewPostFragment extends Fragment {
             String title = binding.postTitle.getText().toString();
             String details = binding.postDes.getText().toString();
             String location = binding.address.getText().toString();
-            String label=getActivity().getPreferences(getContext().MODE_PRIVATE).getString("user","label");
+            String label=sp.getString("label","");
 
             Post post = new Post(title,title, "", details,  location,label);
             if (details.equals("") || title.equals("")) {

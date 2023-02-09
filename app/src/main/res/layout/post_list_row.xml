@@ -21,11 +21,13 @@
     <TextView
         android:id="@+id/postlistrow_name_tv"
         android:layout_width="86dp"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:text="TextView"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/postlistrow_label_tv"
-        app:layout_constraintStart_toStartOf="@+id/postlistrow_avatar_img"
+        app:layout_constraintStart_toStartOf="@+id/postlistrow_label_tv"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

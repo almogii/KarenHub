@@ -8,6 +8,7 @@ import android.util.Pair;
 import androidx.core.os.HandlerCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -76,6 +77,8 @@ public class Model {
         firebaseModel.login(email,password,listener);
      }
 
-
+     public FirebaseFirestore getDb(){
+        return firebaseModel.getDb();
+     }
 
 }
