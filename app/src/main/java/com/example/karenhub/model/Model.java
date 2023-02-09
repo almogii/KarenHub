@@ -72,7 +72,7 @@ public class Model {
      public void signUp(String email,String label,String password,Listener<Pair<Boolean,String>> listener){
         firebaseModel.signUp(email,label,password,listener);
      }
-     public void login(String email,String password,Listener<Boolean> listener){
+     public void login(String email,String password,Listener<Pair<Boolean,String>> listener){
         firebaseModel.login(email,password,listener);
      }
 
