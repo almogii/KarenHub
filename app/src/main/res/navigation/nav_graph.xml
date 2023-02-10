@@ -17,8 +17,8 @@
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.karenhub.PostFragment"
-        android:label="fragment_post"
-        tools:layout="@layout/fragment_post" >
+        android:label=" Post"
+        tools:layout="@layout/fragment_post">
         <argument
             android:name="postTitle"
             app:argType="string" />

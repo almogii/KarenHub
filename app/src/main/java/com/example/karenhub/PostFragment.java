@@ -53,6 +53,7 @@ public class PostFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post, container, false);
+
         //show post details
         title = PostFragmentArgs.fromBundle(getArguments()).getPostTitle();
         details=PostFragmentArgs.fromBundle(getArguments()).getPostDetails();
