@@ -24,6 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,6 +56,10 @@ public class FirebaseModel{
                         Post post = Post.fromJson(json.getData());
                         list.add(post);
                     }
+                }
+                if(list!=null) {
+                    Collections.sort(list, (p1, p2) ->
+                            Long.compare(p2.getTimestamp(), p1.getTimestamp()));
                 }
                 callback.onComplete(list);
             }

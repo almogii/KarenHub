@@ -30,6 +30,11 @@ import com.example.karenhub.databinding.FragmentAddPostBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class AddNewPostFragment extends Fragment {
     FragmentAddPostBinding binding;
@@ -114,10 +119,16 @@ public class AddNewPostFragment extends Fragment {
             String title = binding.postTitle.getText().toString();
             String details = binding.postDes.getText().toString();
             String location = binding.address.getText().toString();
-
             String label=sp.getString("label","");
-
-            Post post = new Post(title,title, "", details,  location,label);
+            String id=title;
+            try {
+                MessageDigest digest=MessageDigest.getInstance("SHA-256");
+                byte[] hash=digest.digest((title+Timestamp.now().getSeconds()+"").getBytes(StandardCharsets.UTF_8));
+                id=String.valueOf(hash);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            Post post = new Post(id,title, "", details,  location,label, Timestamp.now().getSeconds());
             if (details.equals("") || title.equals("")) {
                 Toast.makeText(getContext(), "missing title or details ", Toast.LENGTH_LONG).show();
             } else {
@@ -125,7 +136,7 @@ public class AddNewPostFragment extends Fragment {
                     binding.avatarImg.setDrawingCacheEnabled(true);
                     binding.avatarImg.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
-                    Model.instance().uploadImage(title, bitmap, url -> {
+                    Model.instance().uploadImage(id, bitmap, url -> {
                         if (url != null) {
                             post.setImgUrl(url);
                         }
