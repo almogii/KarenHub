@@ -12,12 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.squareup.picasso.Picasso;
+
 public class BlueFragment extends Fragment {
-    TextView titleTv,detailsTv,locationTV,imgUrl_Tv;
+    TextView titleTv,detailsTv,locationTV;
     String title;
     String details;
     String  location;
     String imgUrl;
+    ImageView image;
 
     public static BlueFragment newInstance(String title,String details,String location,String ImgUrl){
         BlueFragment frag = new BlueFragment();
@@ -40,7 +43,6 @@ public class BlueFragment extends Fragment {
             this.details=bundle.getString("DETAILS");
             this.location=bundle.getString("LOCATION");
             this.imgUrl=bundle.getString("IMAGE");
-
         }
     }
 
@@ -54,12 +56,18 @@ public class BlueFragment extends Fragment {
         details=BlueFragmentArgs.fromBundle(getArguments()).getPostDetails();
         location=BlueFragmentArgs.fromBundle(getArguments()).getPostLocInfo();
         imgUrl=BlueFragmentArgs.fromBundle(getArguments()).getPostImgUrl();
+
         TextView titleTv = view.findViewById(R.id.bluefrag_title_tv);
         if (title != null){titleTv.setText(title);}
         detailsTv=view.findViewById(R.id.postDetails_tv);
         if(details!=null){detailsTv.setText(details);}
         locationTV=view.findViewById(R.id.postLocation);
         if(location!=null){locationTV.setText(location);}
+        image=view.findViewById(R.id.postUrl_blueFrag);
+        if(!imgUrl.isEmpty()){
+            Picasso.get().load(imgUrl).into(image);
+        }
+
 
         View button = view.findViewById(R.id.bluefrag_back_btn);
         button.setOnClickListener((view1)->{Navigation.findNavController(view1).popBackStack();});
