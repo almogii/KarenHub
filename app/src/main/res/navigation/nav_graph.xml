@@ -11,14 +11,14 @@
         android:label="Posts List"
         tools:layout="@layout/fragment_posts_list">
         <action
-            android:id="@+id/action_postsListFragment_to_blueFragment"
-            app:destination="@id/blueFragment" />
+            android:id="@+id/action_postsListFragment_to_postFragment"
+            app:destination="@id/postFragment" />
     </fragment>
     <fragment
-        android:id="@+id/blueFragment"
-        android:name="com.example.karenhub.BlueFragment"
-        android:label="fragment_blue"
-        tools:layout="@layout/fragment_blue" >
+        android:id="@+id/postFragment"
+        android:name="com.example.karenhub.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" >
         <argument
             android:name="postTitle"
             app:argType="string" />

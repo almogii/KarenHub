@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".BlueFragment">
+    tools:context=".PostFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/bluefrag_title_tv"
+        android:id="@+id/postfrag_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -19,10 +19,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postUrl_blueFrag" />
+        app:layout_constraintTop_toBottomOf="@+id/postUrl_postFrag" />
 
     <Button
-        android:id="@+id/bluefrag_back_btn"
+        android:id="@+id/postfrag_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="back to list"
@@ -35,11 +35,10 @@
         android:id="@+id/postDetails_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bluefrag_title_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/postfrag_title_tv" />
 
     <TextView
         android:id="@+id/postLocation"
@@ -50,13 +49,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/postDetails_tv" />
 
+    <TextView
+        android:id="@+id/labelTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/postUrl_blueFrag"
+        android:id="@+id/postUrl_postFrag"
         android:layout_width="350dp"
         android:layout_height="250dp"
         android:src="@drawable/avatar"
-        app:layout_constraintBottom_toTopOf="@+id/bluefrag_title_tv"
+        app:layout_constraintBottom_toTopOf="@+id/postfrag_title_tv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
