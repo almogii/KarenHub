@@ -66,7 +66,7 @@ public class PostFragment extends Fragment {
         if(details!=null){detailsTv.setText(details);}
         locationTV=view.findViewById(R.id.postLocation);
         if(location!=null){locationTV.setText(location);}
-        image=view.findViewById(R.id.postUrl_postFrag);
+        image=view.findViewById(R.id.postUrl_blueFrag);
         if(!imgUrl.isEmpty()){
             Picasso.get().load(imgUrl).into(image);
         }

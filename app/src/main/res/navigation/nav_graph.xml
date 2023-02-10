@@ -52,11 +52,6 @@
     </fragment>
     <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addNewPostFragment" />
     <fragment
-        android:id="@+id/aboutFragment"
-        android:name="com.example.karenhub.AboutFragment"
-        android:label="About"
-        tools:layout="@layout/fragment_about" />
-    <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.karenhub.MapsFragment"
         android:label="@string/fragment_maps"

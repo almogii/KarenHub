@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postUrl_postFrag" />
+        app:layout_constraintTop_toBottomOf="@+id/postUrl_blueFrag" />
 
     <Button
         android:id="@+id/postfrag_back_btn"
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/postUrl_postFrag"
+        android:id="@+id/postUrl_blueFrag"
         android:layout_width="350dp"
         android:layout_height="250dp"
         android:src="@drawable/avatar"
