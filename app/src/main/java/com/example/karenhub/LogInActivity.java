@@ -1,5 +1,6 @@
 package com.example.karenhub;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
@@ -18,8 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.karenhub.model.Model;
+import com.example.karenhub.model.Post;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Locale;
 
@@ -31,6 +38,7 @@ public class LogInActivity extends AppCompatActivity {
     ImageView loaderIV;
     TextView errorTV;
     FirebaseUser user;
+    String label;
     SharedPreferences sp;
 
 
@@ -89,22 +97,38 @@ public class LogInActivity extends AppCompatActivity {
                     Model.instance().login(email, password, result -> {
 
                         if (result.first) {
-                            Toast.makeText(LogInActivity.this, result.second, Toast.LENGTH_SHORT).show();
-                            errorTV.setText(result.second);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("email", email);
-                            editor.putString("password", password);
-                            editor.apply();
-                            i = new Intent(getApplicationContext(), MainActivity.class);
-                            Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(
-                                    getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out)
-                                    .toBundle();
-                            startActivity(i, bundle);
-                            finish();
+                            Model.instance().getDb().collection("users")
+                                    .whereEqualTo("email",email).get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful()){
+                                                //Toast.makeText(LogInActivity.this, result.second, Toast.LENGTH_SHORT).show();
+                                                errorTV.setText(result.second);
+                                                QuerySnapshot querySnapshot = task.getResult();
+                                                if(!querySnapshot.isEmpty()){
+                                                    DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                                                    label = document.getString("label");
+                                                    SharedPreferences.Editor editor = sp.edit();
+                                                    editor.putString("email", email);
+                                                    editor.putString("label", label);
+                                                    editor.putString("password", password);
+                                                    editor.apply();
+                                                    i = new Intent(getApplicationContext(), MainActivity.class);
+                                                    Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(
+                                                                    getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out)
+                                                            .toBundle();
+                                                    startActivity(i, bundle);
+                                                    finish();
+                                                }
+                                            } else {
+                                                errorTV.setText("An Error has occurred");
+                                            }
+                                        }
+                                    });
                         }
                         else {
                             errorTV.setText(result.second);
-
                         }
                         loaderIV.post(() -> {
                             loaderIV.clearAnimation();

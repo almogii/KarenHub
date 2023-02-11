@@ -11,19 +11,28 @@
         android:label="Posts List"
         tools:layout="@layout/fragment_posts_list">
         <action
-            android:id="@+id/action_postsListFragment_to_blueFragment"
-            app:destination="@id/blueFragment" />
+            android:id="@+id/action_postsListFragment_to_postFragment"
+            app:destination="@id/postFragment" />
     </fragment>
     <fragment
-        android:id="@+id/blueFragment"
-        android:name="com.example.karenhub.BlueFragment"
-        android:label="fragment_blue"
-        tools:layout="@layout/fragment_blue" >
+        android:id="@+id/postFragment"
+        android:name="com.example.karenhub.PostFragment"
+        android:label=" Post info"
+        tools:layout="@layout/fragment_post">
         <argument
-            android:name="blueTitle"
+            android:name="postTitle"
             app:argType="string" />
         <argument
             android:name="postDetails"
+            app:argType="string" />
+        <argument
+            android:name="postLocInfo"
+            app:argType="string" />
+        <argument
+            android:name="postLabel"
+            app:argType="string" />
+        <argument
+            android:name="PostImgUrl"
             app:argType="string" />
     </fragment>
     <fragment
@@ -42,11 +51,6 @@
             app:argType="string" />
     </fragment>
     <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addNewPostFragment" />
-    <fragment
-        android:id="@+id/aboutFragment"
-        android:name="com.example.karenhub.AboutFragment"
-        android:label="About"
-        tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.karenhub.MapsFragment"

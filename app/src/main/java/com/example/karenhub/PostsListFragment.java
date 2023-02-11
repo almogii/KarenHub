@@ -41,8 +41,8 @@ public class PostsListFragment extends Fragment {
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
                 Post st = viewModel.getData().get(pos);
-                PostsListFragmentDirections.ActionPostsListFragmentToBlueFragment action =
-                        PostsListFragmentDirections.actionPostsListFragmentToBlueFragment(st.title,st.details);
+                PostsListFragmentDirections.ActionPostsListFragmentToPostFragment action =
+                        PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl);
                 Navigation.findNavController(view).navigate((NavDirections) action);
             }
         });

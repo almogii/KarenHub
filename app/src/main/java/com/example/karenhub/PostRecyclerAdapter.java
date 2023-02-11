@@ -24,7 +24,7 @@ class PostViewHolder extends RecyclerView.ViewHolder{
         super(itemView);
         this.data = data;
         nameTv = itemView.findViewById(R.id.postlistrow_name_tv);
-        idTv = itemView.findViewById(R.id.postlistrow_id_tv);
+        idTv = itemView.findViewById(R.id.postlistrow_label_tv);
         avatarImage = itemView.findViewById(R.id.postlistrow_avatar_img);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +37,7 @@ class PostViewHolder extends RecyclerView.ViewHolder{
 
     public void bind(Post post, int pos) {
         nameTv.setText(post.title);
-        idTv.setText(post.id);
+        idTv.setText(post.label);
         //cb.setChecked(post.cb);
         //cb.setTag(pos);
         if (post.getImgUrl()  != "") {

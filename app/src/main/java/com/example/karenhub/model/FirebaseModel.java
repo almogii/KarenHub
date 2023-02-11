@@ -24,6 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,6 +57,10 @@ public class FirebaseModel{
                         list.add(post);
                     }
                 }
+                if(list!=null) {
+                    Collections.sort(list, (p1, p2) ->
+                            Long.compare(p2.getTimestamp(), p1.getTimestamp()));
+                }
                 callback.onComplete(list);
             }
         });
@@ -70,6 +75,22 @@ public class FirebaseModel{
             }
         });
     }
+    public void getPostById(String id, Model.Listener<Post> listener){
+        db.collection(Post.COLLECTION).whereEqualTo(Post.ID,id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Post post = new Post();
+                if (task.isSuccessful()){
+                    QuerySnapshot jsonsList = task.getResult();
+                    for (DocumentSnapshot json: jsonsList){
+                        post = Post.fromJson(json.getData());
+
+                    }
+                }
+                listener.onComplete(post);
+            }
+        });
+    }
 
     void uploadImage(String name, Bitmap bitmap, Model.Listener<String> listener){
         StorageReference storageRef = storage.getReference();
@@ -77,7 +98,6 @@ public class FirebaseModel{
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-
         UploadTask uploadTask = imagesRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -140,7 +160,8 @@ public class FirebaseModel{
             }
         });
     }
-    public void login(String email, String password,Model.Listener<Pair<Boolean,String>> listener){
+
+    public void login(String email, String password, Model.Listener<Pair<Boolean,String>> listener) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -151,5 +172,9 @@ public class FirebaseModel{
                 else{listener.onComplete(new Pair<>(false,"Login failed"));}
             }
         });
+    }
+
+    public FirebaseFirestore getDb() {
+        return db;
     }
 }

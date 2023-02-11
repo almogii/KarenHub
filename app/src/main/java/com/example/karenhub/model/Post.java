@@ -7,6 +7,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.Timestamp;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,16 +25,18 @@ public class Post {
     public String details = "";
     public String location="";
     public String label="";
+    public Long timestamp;
     @Ignore
     public Post(){
     }
-    public Post(String id, String title, String imgUrl, String details,String location, String label) {
+    public Post(String id, String title, String imgUrl, String details,String location, String label,Long timestamp) {
         this.title = title;
         this.id = id;
         this.imgUrl = imgUrl;
         this.details = details;
         this.location=location;
         this.label=label;
+        this.timestamp=timestamp;
 
     }
 
@@ -39,16 +46,20 @@ public class Post {
     static final String IMAGE = "image";
     static final String DETAILS = "details";
     static final String LOCATION = "location";
+    static final String TIMESTAMP = "timestamp";
     static final String COLLECTION = "posts";
 
-    public static Post fromJson(Map<String,Object> json){
-        String id = (String)json.get(ID);
-        String label = (String)json.get(LABEL);
-        String name = (String)json.get(TITLE);
-        String image = (String)json.get(IMAGE);
+
+    public static Post fromJson(Map<String, Object> json) {
+        String id = (String) json.get(ID);
+        String label = (String) json.get(LABEL);
+        String name = (String) json.get(TITLE);
+        String image = (String) json.get(IMAGE);
         String details = (String) json.get(DETAILS);
-        String location=(String)json.get(LOCATION) ;
-        Post post = new Post(id,name,image,details,location,label);
+        String location = (String) json.get(LOCATION);
+        Long timestamp =(Long) json.get(TIMESTAMP);
+
+        Post post = new Post(id, name, image, details, location, label, timestamp);
         return post;
     }
 
@@ -60,29 +71,28 @@ public class Post {
         json.put(DETAILS, getDetails());
         json.put(LOCATION,getLocation());
         json.put(LABEL,getLabel());
+        json.put(TIMESTAMP,getTimestamp());
+
 
         return json;
     }
 
 
-
-
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
     public void setId(@NonNull String id) {
         this.id = id;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-
     public void setDetails(String details) {
         this.details = details;
     }
-
     @NonNull
     public String getId() {
         return id;
@@ -102,6 +112,7 @@ public class Post {
     public String getLabel() {
         return label;
     }
+    public Long getTimestamp() {return this.timestamp;}
 
 
 }
