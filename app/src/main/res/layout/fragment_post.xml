@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:visibility="visible"
     tools:context=".PostFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -20,16 +21,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/postUrl_blueFrag" />
-
-    <Button
-        android:id="@+id/postfrag_back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back to list"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postLocation" />
 
     <TextView
         android:id="@+id/postDetails_tv"
@@ -67,5 +58,15 @@
         app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/editBtn_postFrag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:text="edit"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postLocation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

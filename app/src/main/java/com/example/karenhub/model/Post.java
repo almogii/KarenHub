@@ -63,7 +63,7 @@ public class Post {
         return post;
     }
 
-    public Map<String,Object> toJson(){
+    public  Map<String,Object> toJson(){
         Map<String, Object> json = new HashMap<>();
         json.put(ID, getId());
         json.put(TITLE, getTitle());

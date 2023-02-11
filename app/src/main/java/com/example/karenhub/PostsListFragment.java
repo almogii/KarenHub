@@ -30,7 +30,6 @@ public class PostsListFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentPostsListBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new PostRecyclerAdapter(getLayoutInflater(), viewModel.getData());
@@ -42,7 +41,7 @@ public class PostsListFragment extends Fragment {
                 Log.d("TAG", "Row was clicked " + pos);
                 Post st = viewModel.getData().get(pos);
                 PostsListFragmentDirections.ActionPostsListFragmentToPostFragment action =
-                        PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl);
+                        PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl,st.id);
                 Navigation.findNavController(view).navigate((NavDirections) action);
             }
         });

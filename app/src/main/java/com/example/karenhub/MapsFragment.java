@@ -224,16 +224,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         });
         currentLocBtn.setOnClickListener((btn_click) -> {
             getCurrentLocation();
-            String locationName = lastLatLng.toString();
-            try {
-                List<Address> address = geocoder.getFromLocation(lastLatLng.latitude, lastLatLng.longitude, 1);
-                if (address.size() >= 1) {
-                    locationName = address.get(0).getAddressLine(0);
+            if(lastLatLng!=null) {
+                String locationName = lastLatLng.toString();
+                try {
+                    List<Address> address = geocoder.getFromLocation(lastLatLng.latitude, lastLatLng.longitude, 1);
+                    if (address.size() >= 1) {
+                        locationName = address.get(0).getAddressLine(0);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+                changeMarker(locationName);
             }
-            changeMarker(locationName);
         });
     }
 

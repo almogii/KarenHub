@@ -34,6 +34,12 @@
         <argument
             android:name="PostImgUrl"
             app:argType="string" />
+        <action
+            android:id="@+id/action_postFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
+        <argument
+            android:name="postId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/addNewPostFragment"
@@ -60,5 +66,39 @@
             android:id="@+id/action_mapsFragment_to_addNewPostFragment"
             app:destination="@id/addNewPostFragment"
             app:popUpTo="@id/postsListFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.karenhub.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+        <action
+            android:id="@+id/action_editPostFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <argument
+            android:name="location"
+            app:argType="com.google.android.gms.maps.model.LatLng" />
+        <argument
+            android:name="loactionName"
+            app:argType="string" />
+        <argument
+            android:name="postId"
+            app:argType="string" />
+        <argument
+            android:name="EditTitle"
+            app:argType="string" />
+        <argument
+            android:name="Editdetails"
+            app:argType="string" />
+        <argument
+            android:name="editLabel"
+            app:argType="string" />
+        <argument
+            android:name="editImgUrl"
+            app:argType="string" />
+    </fragment>
+    <action android:id="@+id/action_global_editPostFragment" app:destination="@id/editPostFragment" />
 </navigation>
