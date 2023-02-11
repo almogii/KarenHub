@@ -123,8 +123,15 @@ public class AddNewPostFragment extends Fragment {
             String id=title;
             try {
                 MessageDigest digest=MessageDigest.getInstance("SHA-256");
-                byte[] hash=digest.digest((title+Timestamp.now().getSeconds()+"").getBytes(StandardCharsets.UTF_8));
-                id=String.valueOf(hash);
+                byte[] hash=digest.digest((title+
+                        Timestamp.now().getSeconds()+
+                        Timestamp.now().getNanoseconds()+"")
+                        .getBytes(StandardCharsets.UTF_8));
+                StringBuilder stringBuilder = new StringBuilder();
+                for (byte b : hash) {
+                    stringBuilder.append(String.format("%02x", b & 0xff));
+                }
+                id=stringBuilder.toString();
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
