@@ -58,12 +58,15 @@ public class MainActivity extends AppCompatActivity {
                     ViewModelProvider viewModelProvider = new ViewModelProvider(this);
                     MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
                     Bundle savedInstanceStateData = viewModel.getSavedInstanceStateData();
-                    LatLng location = savedInstanceStateData.getParcelable("location");
-                    String locationName  = savedInstanceStateData.getString("locationName");
-                    MapsFragmentDirections.ActionMapsFragmentToAddNewPostFragment action =
-                            MapsFragmentDirections.actionMapsFragmentToAddNewPostFragment(location,locationName);
-
-                    navController.navigate((NavDirections) action);
+                    LatLng location = savedInstanceStateData.getParcelable("locationTemp");
+                    String locationName  = savedInstanceStateData.getString("locationNameTemp");
+                    savedInstanceStateData.putParcelable("location",location);
+                    savedInstanceStateData.putString("locationName",locationName);
+                    viewModel.setSavedInstanceStateData(savedInstanceStateData);
+                    /*MapsFragmentDirections.ActionMapsFragmentToAddNewPostFragment action =
+                            MapsFragmentDirections.actionMapsFragmentToAddNewPostFragment(location,locationName);*/
+                    navController.popBackStack();
+                    //navController.navigate((NavDirections) action);
                     return true;
                 });
                 NavigationUI.setupWithNavController(navView,navController);

@@ -246,9 +246,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 .title(title);
         map.clear();
         map.addMarker(marker);
-        savedInstanceState = new Bundle();
-        savedInstanceState.putParcelable("location", lastLatLng);
-        savedInstanceState.putString("locationName", title);
+        if (savedInstanceState == null) {
+            savedInstanceState = new Bundle();
+        }
+        savedInstanceState.putParcelable("locationTemp", lastLatLng);
+        savedInstanceState.putString("locationNameTemp", title);
         this.mapsFragmentModel.setSavedInstanceStateData(savedInstanceState);
     }
 

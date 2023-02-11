@@ -15,6 +15,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -82,7 +83,15 @@ public class AddNewPostFragment extends Fragment {
             @Override
             public void onActivityResult(Bitmap result) {
                 if (result != null) {
+                    ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+                    MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
                     binding.avatarImg.setImageBitmap(result);
+                    Bundle bundle = new Bundle();
+                    if(viewModel.getSavedInstanceStateData() != null){
+                        bundle = viewModel.getSavedInstanceStateData();
+                    }
+                    bundle.putParcelable("imgBitmap",result);
+                    viewModel.setSavedInstanceStateData(bundle);
                     isAvatarSelected = true;
                 }
             }
@@ -169,4 +178,24 @@ public class AddNewPostFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+        MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
+        Bundle savedInstanceStateData = viewModel.getSavedInstanceStateData();
+        if(savedInstanceStateData != null) {
+            this.location = viewModel.getSavedInstanceStateData().getParcelable("location");
+            this.locationName = viewModel.getSavedInstanceStateData().getString("locationName");
+            if(locationName != null) {
+                binding.address.setText(locationName);
+            }
+            Bitmap bitmap = viewModel.getSavedInstanceStateData().getParcelable("imgBitmap");
+            if (bitmap != null){
+                binding.avatarImg.setImageBitmap(bitmap);
+            }
+        } else {
+            viewModel.setSavedInstanceStateData(new Bundle());
+        }
+    }
 }
