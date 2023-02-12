@@ -128,14 +128,10 @@ public class EditPostFragment extends Fragment {
         title=requireArguments().getString("EditTitle");
         details=requireArguments().getString("Editdetails");
         View view=binding.getRoot();
-        //location btn
-        binding.addLoctionEditPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.mapsFragment,savedInstanceState);
-            }
-        });
-        //show previous post details
+        if (this.locationName != null) {
+            binding.addresseditpost.setText(locationName);
+        }
+//show previous post details
         if(title!=null){
             binding.editpostTitle.setText(title);
         }
@@ -148,6 +144,12 @@ public class EditPostFragment extends Fragment {
         if(locationName!=null){
             binding.addresseditpost.setText(locationName);
         }
+        binding.addLoctionEditPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.mapsFragment,savedInstanceState);
+            }
+        });
 
 
         //save btn
@@ -155,12 +157,9 @@ public class EditPostFragment extends Fragment {
             String editedTitle=binding.editpostTitle.getText().toString();
             String editedDetails=binding.editpostDescription.getText().toString();
             String editedLocation=binding.addresseditpost.getText().toString();
-
-            String editedImgUrl;
-            String editedLabel=sp.getString("label","");
                 Log.d("title",editedTitle);
                 Log.d("id",id);
-
+                Log.d("location",locationName);
             if (isAvatarSelected) {
                 binding.avatarImgEditPost.setDrawingCacheEnabled(true);
                 binding.avatarImgEditPost.buildDrawingCache();
@@ -170,23 +169,19 @@ public class EditPostFragment extends Fragment {
                         updates.put("image",url);
                     }
                 });
-
             }
-
             if(editedTitle!=null && editedTitle!=title){
                 updates.put("title",editedTitle);
             }
             if(editedDetails!=null&&editedDetails!=details){
                 updates.put("details",editedDetails);
             }
-            if(!editedLocation.equals(locationName)){
+            if(!editedLocation.isEmpty() ||locationName!=null){
                 updates.put("location",editedLocation);
             }
             updatePostByid(id);
         });
 
-        binding.imageBtnEditPost.setOnClickListener(view1 -> cameraLauncher.launch(null));
-        binding.galleryBtnEditPost.setOnClickListener(view1 -> galleryLauncher.launch(imgUrl));
     return view;
     }
 
@@ -213,6 +208,7 @@ public class EditPostFragment extends Fragment {
     }
     public void updatePostByid(String id){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Log.d("map",updates.toString());
         CollectionReference collRef = db.collection("posts");
         collRef.whereEqualTo("id", id)
                 .get()
