@@ -1,14 +1,20 @@
 package com.example.karenhub;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -27,13 +33,6 @@ import com.example.karenhub.model.Post;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,6 +57,7 @@ public class EditPostFragment extends Fragment {
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
     SharedPreferences sp;
+    Boolean isAvatarSelected = false;
 
 
     public static EditPostFragment newInstance() {
@@ -87,7 +87,34 @@ public class EditPostFragment extends Fragment {
                 return false;
             }
         }, this, Lifecycle.State.RESUMED);
+        cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), new ActivityResultCallback<Bitmap>() {
+            @Override
+            public void onActivityResult(Bitmap result) {
+                if (result != null) {
+                    ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+                    MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
+                    binding.avatarImgEditPost.setImageBitmap(result);
+                    Bundle bundle = new Bundle();
+                    if(viewModel.getSavedInstanceStateData() != null){
+                        bundle = viewModel.getSavedInstanceStateData();
+                    }
+                    bundle.putParcelable("imgBitmap",result);
+                    viewModel.setSavedInstanceStateData(bundle);
+                    isAvatarSelected = true;
+                }
+            }
+        });
+        galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri result) {
+                if (result != null) {
+                    binding.avatarImgEditPost.setImageURI(result);
+                    isAvatarSelected = true;
+                }
+            }
+        });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,6 +145,9 @@ public class EditPostFragment extends Fragment {
         if (!imgUrl.isEmpty()){
             Picasso.get().load(imgUrl).into(binding.avatarImgEditPost);
         }
+        if(locationName!=null){
+            binding.addresseditpost.setText(locationName);
+        }
 
 
         //save btn
@@ -125,9 +155,23 @@ public class EditPostFragment extends Fragment {
             String editedTitle=binding.editpostTitle.getText().toString();
             String editedDetails=binding.editpostDescription.getText().toString();
             String editedLocation=binding.addresseditpost.getText().toString();
+
+            String editedImgUrl;
             String editedLabel=sp.getString("label","");
                 Log.d("title",editedTitle);
                 Log.d("id",id);
+
+            if (isAvatarSelected) {
+                binding.avatarImgEditPost.setDrawingCacheEnabled(true);
+                binding.avatarImgEditPost.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) binding.avatarImgEditPost.getDrawable()).getBitmap();
+                Model.instance().uploadImage(id, bitmap, url -> {
+                    if (url != null) {
+                        updates.put("image",url);
+                    }
+                });
+
+            }
 
             if(editedTitle!=null && editedTitle!=title){
                 updates.put("title",editedTitle);
@@ -135,16 +179,38 @@ public class EditPostFragment extends Fragment {
             if(editedDetails!=null&&editedDetails!=details){
                 updates.put("details",editedDetails);
             }
-//            if(!editedLocation.equals(locationName)){
-//                updates.put("location",editedLocation);
-//            }
+            if(!editedLocation.equals(locationName)){
+                updates.put("location",editedLocation);
+            }
             updatePostByid(id);
         });
 
-
-        return view;
+        binding.imageBtnEditPost.setOnClickListener(view1 -> cameraLauncher.launch(null));
+        binding.galleryBtnEditPost.setOnClickListener(view1 -> galleryLauncher.launch(imgUrl));
+    return view;
     }
 
+
+@Override
+    public void onResume() {
+        super.onResume();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+        MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
+        Bundle savedInstanceStateData = viewModel.getSavedInstanceStateData();
+        if(savedInstanceStateData != null) {
+            this.location = viewModel.getSavedInstanceStateData().getParcelable("location");
+            this.locationName = viewModel.getSavedInstanceStateData().getString("locationName");
+            if(locationName != null) {
+                binding.addresseditpost.setText(locationName);
+            }
+            Bitmap bitmap = viewModel.getSavedInstanceStateData().getParcelable("imgBitmap");
+            if (bitmap != null){
+                binding.avatarImgEditPost.setImageBitmap(bitmap);
+            }
+        } else {
+            viewModel.setSavedInstanceStateData(new Bundle());
+        }
+    }
     public void updatePostByid(String id){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collRef = db.collection("posts");
@@ -155,8 +221,6 @@ public class EditPostFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = documentSnapshot.getReference();
-//                            Map<String, Object> updates = new HashMap<>();
-//                            updates.put("field_name", newValue);
                             docRef.update(updates)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override

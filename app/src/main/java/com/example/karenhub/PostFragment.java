@@ -98,7 +98,6 @@ public class PostFragment extends Fragment {
                    Navigation.findNavController(view).navigate((NavDirections) action);
                }
            });
-
        }
         return view;
     }
