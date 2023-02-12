@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView,navController);
 
         navController.addOnDestinationChangedListener((navController,navDestination,bundle)->{
-
             if(navDestination.getLabel().equals("Set Location")){
                 fragment_state = 1;
                 navView.getMenu().clear();
@@ -104,4 +103,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        return false;
+    }
 }

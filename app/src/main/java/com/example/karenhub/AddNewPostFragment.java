@@ -11,12 +11,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,11 +33,13 @@ import com.example.karenhub.databinding.FragmentAddPostBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.Timestamp;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 public class AddNewPostFragment extends Fragment {
     FragmentAddPostBinding binding;
@@ -46,6 +50,7 @@ public class AddNewPostFragment extends Fragment {
     ActivityResultLauncher<String> galleryLauncher;
     SharedPreferences sp;
     Boolean isAvatarSelected = false;
+    private BottomNavigationView bottomNavigationView;
 
     public static AddNewPostFragment newInstance(LatLng location, String locationName) {
         AddNewPostFragment newPostFragment = new AddNewPostFragment();
@@ -59,6 +64,7 @@ public class AddNewPostFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         sp = getContext().getSharedPreferences("user",getContext().MODE_PRIVATE);
         Bundle bundle = getArguments();
         if (!bundle.isEmpty()) {
@@ -111,6 +117,7 @@ public class AddNewPostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        bottomNavigationView = getActivity().findViewById(R.id.main_bottomNavigationView);
         binding = FragmentAddPostBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         if (this.locationName != null) {
@@ -179,8 +186,19 @@ public class AddNewPostFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.addNewPostFragment);
+        menuItem.setEnabled(false);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.addNewPostFragment);
+        menuItem.setEnabled(false);
         ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
         MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
         Bundle savedInstanceStateData = viewModel.getSavedInstanceStateData();
@@ -196,6 +214,16 @@ public class AddNewPostFragment extends Fragment {
             }
         } else {
             viewModel.setSavedInstanceStateData(new Bundle());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.addNewPostFragment);
+        if(menuItem != null) {
+            menuItem.setEnabled(true);
         }
     }
 }

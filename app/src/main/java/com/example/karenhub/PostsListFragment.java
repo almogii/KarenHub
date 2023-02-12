@@ -12,22 +12,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.karenhub.databinding.FragmentPostsListBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class PostsListFragment extends Fragment {
     FragmentPostsListBinding binding;
     PostRecyclerAdapter adapter;
     PostsListFragmentViewModel viewModel;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        bottomNavigationView = getActivity().findViewById(R.id.main_bottomNavigationView);
         binding = FragmentPostsListBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
@@ -57,10 +62,29 @@ public class PostsListFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(PostsListFragmentViewModel.class);
     }
 
+   /*@Override
+    public void onStart() {
+        super.onStart();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.postsListFragment);
+        menuItem.setEnabled(false);
+    }*/
+
     @Override
     public void onResume() {
         super.onResume();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.postsListFragment);
+        menuItem.setEnabled(false);
         reloadData();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.postsListFragment);
+        menuItem.setEnabled(true);
     }
 
     void reloadData() {

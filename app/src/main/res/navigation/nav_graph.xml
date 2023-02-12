@@ -61,4 +61,9 @@
             app:destination="@id/addNewPostFragment"
             app:popUpTo="@id/postsListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userProfile"
+        android:name="com.example.karenhub.userProfile"
+        android:label="User Profile"
+        tools:layout="@layout/fragment_user_profile" />
 </navigation>

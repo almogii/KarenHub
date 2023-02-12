@@ -2,6 +2,7 @@ package com.example.karenhub;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -224,16 +225,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         });
         currentLocBtn.setOnClickListener((btn_click) -> {
             getCurrentLocation();
-            String locationName = lastLatLng.toString();
-            try {
-                List<Address> address = geocoder.getFromLocation(lastLatLng.latitude, lastLatLng.longitude, 1);
-                if (address.size() >= 1) {
-                    locationName = address.get(0).getAddressLine(0);
+            if(lastLatLng!=null) {
+                String locationName = lastLatLng.toString();
+                try {
+                    List<Address> address = geocoder.getFromLocation(lastLatLng.latitude, lastLatLng.longitude, 1);
+                    if (address.size() >= 1) {
+                        locationName = address.get(0).getAddressLine(0);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+                changeMarker(locationName);
             }
-            changeMarker(locationName);
         });
     }
 
@@ -303,6 +306,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         mMapView.onStop();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
 }
