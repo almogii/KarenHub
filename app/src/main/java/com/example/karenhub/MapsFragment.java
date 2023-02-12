@@ -300,13 +300,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onStart() {
         super.onStart();
         mMapView.onStart();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mMapView.onStop();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
-
 }

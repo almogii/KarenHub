@@ -177,4 +177,32 @@ public class FirebaseModel{
     public FirebaseFirestore getDb() {
         return db;
     }
+
+    public void getUserPosts(String label, Model.Listener<List<Post>> callback) {
+        db.collection(Post.COLLECTION)
+                .whereEqualTo("label", label)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Post> list = new LinkedList<>();
+                        if (task.isSuccessful()){
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json: jsonsList){
+                                Post post = Post.fromJson(json.getData());
+                                list.add(post);
+                            }
+                        }
+                        if(list!=null) {
+                            Collections.sort(list, (p1, p2) ->
+                                    Long.compare(p2.getTimestamp(), p1.getTimestamp()));
+                        }
+                        callback.onComplete(list);
+                    }
+                });
+    }
+
+    public void signOut() {
+        auth.signOut();
+    }
 }

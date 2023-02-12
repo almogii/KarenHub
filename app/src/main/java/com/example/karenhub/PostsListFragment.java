@@ -1,6 +1,9 @@
 package com.example.karenhub;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,8 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,6 +28,7 @@ public class PostsListFragment extends Fragment {
     PostRecyclerAdapter adapter;
     PostsListFragmentViewModel viewModel;
     private BottomNavigationView bottomNavigationView;
+    SharedPreferences sp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,10 +43,11 @@ public class PostsListFragment extends Fragment {
         adapter = new PostRecyclerAdapter(getLayoutInflater(), viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
 
+
+
         adapter.setOnItemClickListener(new PostRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                Log.d("TAG", "Row was clicked " + pos);
                 Post st = viewModel.getData().get(pos);
                 PostsListFragmentDirections.ActionPostsListFragmentToPostFragment action =
                         PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl);
@@ -62,37 +65,39 @@ public class PostsListFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(PostsListFragmentViewModel.class);
     }
 
-   /*@Override
+   @Override
     public void onStart() {
         super.onStart();
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.postsListFragment);
-        menuItem.setEnabled(false);
-    }*/
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.postsListFragment);
-        menuItem.setEnabled(false);
-        reloadData();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+        UserProfileViewModel viewModel = viewModelProvider.get(UserProfileViewModel.class);
+        reloadData(viewModel.getActiveState());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.postsListFragment);
-        menuItem.setEnabled(true);
     }
 
-    void reloadData() {
+    void reloadData(Boolean activeState) {
         binding.progressBar.setVisibility(View.VISIBLE);
-        Model.instance().getAllPosts((stList) -> {
-            viewModel.setData(stList);
-            adapter.setData(viewModel.getData());
-            binding.progressBar.setVisibility(View.GONE);
-        });
+        if(!activeState) {
+            Model.instance().getAllPosts((stList) -> {
+                viewModel.setData(stList);
+                adapter.setData(viewModel.getData());
+                binding.progressBar.setVisibility(View.GONE);
+            });
+        } else {
+            sp = getActivity().getSharedPreferences("user", MODE_PRIVATE);
+            Model.instance().getUserPosts(sp.getString("label",""),(stList) -> {
+                viewModel.setData(stList);
+                adapter.setData(viewModel.getData());
+                binding.progressBar.setVisibility(View.GONE);
+            });
+        }
     }
 }

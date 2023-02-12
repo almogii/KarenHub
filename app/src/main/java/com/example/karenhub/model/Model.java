@@ -29,6 +29,10 @@ public class Model {
 
     }
 
+    public void signOut() {
+        firebaseModel.signOut();
+    }
+
     public interface Listener<T>{
         void onComplete(T data);
     }
@@ -36,6 +40,9 @@ public class Model {
         return firebaseModel.auth;
     }
 
+    public void getUserPosts(String label, Listener<List<Post>> callback) {
+        firebaseModel.getUserPosts(label, callback);
+    }
 
     public void getAllPosts(Listener<List<Post>> callback){
         firebaseModel.getAllPosts(callback);

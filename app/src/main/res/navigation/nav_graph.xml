@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/postsListFragment"
         android:name="com.example.karenhub.PostsListFragment"
-        android:label="Posts List"
+        android:label=""
         tools:layout="@layout/fragment_posts_list">
         <action
             android:id="@+id/action_postsListFragment_to_postFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.karenhub.PostFragment"
-        android:label=" Post info"
+        android:label="Post info"
         tools:layout="@layout/fragment_post">
         <argument
             android:name="postTitle"
@@ -38,7 +38,7 @@
     <fragment
         android:id="@+id/addNewPostFragment"
         android:name="com.example.karenhub.AddNewPostFragment"
-        android:label="Add Post"
+        android:label=""
         tools:layout="@layout/fragment_add_post" >
         <action
             android:id="@+id/action_addNewPostFragment_to_mapsFragment"
@@ -64,6 +64,10 @@
     <fragment
         android:id="@+id/userProfile"
         android:name="com.example.karenhub.userProfile"
-        android:label="User Profile"
-        tools:layout="@layout/fragment_user_profile" />
+        android:label=""
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/action_postsListFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
 </navigation>
