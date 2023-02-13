@@ -1,5 +1,6 @@
 package com.example.karenhub;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -51,6 +52,8 @@ public class AddNewPostFragment extends Fragment {
     SharedPreferences sp;
     Boolean isAvatarSelected = false;
     private BottomNavigationView bottomNavigationView;
+    ViewModelProvider viewModelProvider;
+    MapsFragmentModel viewModel;
 
     public static AddNewPostFragment newInstance(LatLng location, String locationName) {
         AddNewPostFragment newPostFragment = new AddNewPostFragment();
@@ -120,6 +123,8 @@ public class AddNewPostFragment extends Fragment {
         bottomNavigationView = getActivity().findViewById(R.id.main_bottomNavigationView);
         binding = FragmentAddPostBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        viewModelProvider = new ViewModelProvider(getActivity());
+        viewModel = viewModelProvider.get(MapsFragmentModel.class);
         if (this.locationName != null) {
             binding.address.setText(locationName);
         }
@@ -174,7 +179,7 @@ public class AddNewPostFragment extends Fragment {
                 }
             }
         });
-        binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postsListFragment, false));
+        binding.cancelBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postsListFragment, false));
         binding.cameraButton.setOnClickListener(view1 -> {
             cameraLauncher.launch(null);
         });
@@ -185,20 +190,19 @@ public class AddNewPostFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onStart() {
         super.onStart();
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.addNewPostFragment);
-        menuItem.setEnabled(false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Menu menu = bottomNavigationView.getMenu();
+        /*Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.findItem(R.id.addNewPostFragment);
-        menuItem.setEnabled(false);
+        menuItem.setEnabled(false);*/
         ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
         MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
         Bundle savedInstanceStateData = viewModel.getSavedInstanceStateData();
@@ -217,13 +221,11 @@ public class AddNewPostFragment extends Fragment {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onStop() {
         super.onStop();
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.addNewPostFragment);
-        if(menuItem != null) {
-            menuItem.setEnabled(true);
-        }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setShowHideAnimationEnabled(true);
+        viewModel.setSavedInstanceStateData(new Bundle());
     }
 }

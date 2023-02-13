@@ -7,6 +7,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -81,14 +82,14 @@ public class userProfile extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //mViewModel = new ViewModelProvider(this).get(UserProfileViewModel.class);
-        // TODO: Use the ViewModel
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onStart() {
         super.onStart();
         mViewModel.setActiveState(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
     }
 
     @Override
@@ -97,9 +98,11 @@ public class userProfile extends Fragment {
         mViewModel.setActiveState(true);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onStop() {
         super.onStop();
         mViewModel.setActiveState(false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setShowHideAnimationEnabled(true);
     }
 }

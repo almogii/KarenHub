@@ -1,7 +1,9 @@
 package com.example.karenhub;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -33,6 +36,7 @@ import com.example.karenhub.model.Post;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,6 +62,9 @@ public class EditPostFragment extends Fragment {
     ActivityResultLauncher<String> galleryLauncher;
     SharedPreferences sp;
     Boolean isAvatarSelected = false;
+    private BottomNavigationView bottomNavigationView;
+    ViewModelProvider viewModelProvider;
+    MapsFragmentModel viewModel;
 
 
     public static EditPostFragment newInstance() {
@@ -69,6 +76,7 @@ public class EditPostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bottomNavigationView = getActivity().findViewById(R.id.main_bottomNavigationView);
         sp = getContext().getSharedPreferences("user", getContext().MODE_PRIVATE);
         updates=  new HashMap<>();
         Bundle bundle = getArguments();
@@ -91,7 +99,7 @@ public class EditPostFragment extends Fragment {
             @Override
             public void onActivityResult(Bitmap result) {
                 if (result != null) {
-                    ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+                    viewModelProvider = new ViewModelProvider(getActivity());
                     MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
                     binding.avatarImgEditPost.setImageBitmap(result);
                     Bundle bundle = new Bundle();
@@ -128,6 +136,8 @@ public class EditPostFragment extends Fragment {
         title=requireArguments().getString("EditTitle");
         details=requireArguments().getString("Editdetails");
         View view=binding.getRoot();
+        viewModelProvider = new ViewModelProvider(getActivity());
+        viewModel = viewModelProvider.get(MapsFragmentModel.class);
         if (this.locationName != null) {
             binding.addresseditpost.setText(locationName);
         }
@@ -138,7 +148,7 @@ public class EditPostFragment extends Fragment {
         if (details!=null){
             binding.editpostDescription.setText(details);
         }
-        if (!imgUrl.isEmpty()){
+        if (imgUrl != null){
             Picasso.get().load(imgUrl).into(binding.avatarImgEditPost);
         }
         if(locationName!=null){
@@ -151,15 +161,12 @@ public class EditPostFragment extends Fragment {
             }
         });
 
-
         //save btn
         binding.saveEditPost.setOnClickListener(view1 -> {
             String editedTitle=binding.editpostTitle.getText().toString();
             String editedDetails=binding.editpostDescription.getText().toString();
             String editedLocation=binding.addresseditpost.getText().toString();
-                Log.d("title",editedTitle);
-                Log.d("id",id);
-                Log.d("location",locationName);
+
             if (isAvatarSelected) {
                 binding.avatarImgEditPost.setDrawingCacheEnabled(true);
                 binding.avatarImgEditPost.buildDrawingCache();
@@ -180,13 +187,39 @@ public class EditPostFragment extends Fragment {
                 updates.put("location",editedLocation);
             }
             updatePostByid(id);
+            Navigation.findNavController(view1).popBackStack(R.id.postFragment,true);
+            //Navigation.findNavController(view1).navigate(R.id.action_postsListFragment_to_postFragment);
         });
-
+        binding.cancelBtnEditPost.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postFragment, false));
+        binding.imageBtnEditPost.setOnClickListener(view1 -> {
+            cameraLauncher.launch(null);
+        });
+        binding.galleryBtnEditPost.setOnClickListener(view1 -> {
+            galleryLauncher.launch("media/*");
+        });
     return view;
     }
 
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onStart() {
+        super.onStart();
+        bottomNavigationView.setVisibility(View.GONE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setShowHideAnimationEnabled(false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
 
-@Override
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onStop() {
+        super.onStop();
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setShowHideAnimationEnabled(true);
+        viewModel.setSavedInstanceStateData(new Bundle());
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
@@ -206,6 +239,9 @@ public class EditPostFragment extends Fragment {
             viewModel.setSavedInstanceStateData(new Bundle());
         }
     }
+
+
+
     public void updatePostByid(String id){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Log.d("map",updates.toString());
@@ -233,6 +269,5 @@ public class EditPostFragment extends Fragment {
                         }
                     }
                 });
-
     }
 }

@@ -4,12 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".EditPostFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -23,11 +19,14 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/gray_background"
                 android:orientation="vertical">
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp">
 
                     <ImageView
                         android:id="@+id/avatarImg_editPost"
@@ -104,55 +103,53 @@
                         android:layout_height="wrap_content"
                         android:enabled="false"
                         android:hint="address"
-                        android:textColor="#666666" />
+                        android:textColor="#3D021D" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearLayoutCompat"
+                <View
+                    android:id="@+id/seperation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="3dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/roundstyle"
+                    android:backgroundTint="#404040" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/addLoction_editPost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="edit location"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/save_editPost"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_marginBottom="20dp"
+                        android:text="edit location" />
 
                     <Button
                         android:id="@+id/save_editPost"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="save changes"
-                        app:layout_constraintBottom_toBottomOf="@+id/addLoction_editPost"
-                        app:layout_constraintEnd_toStartOf="@+id/cancelBtn_editPost"
-                        app:layout_constraintStart_toEndOf="@+id/addLoction_editPost"
-                        app:layout_constraintTop_toTopOf="@+id/addLoction_editPost" />
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_marginBottom="20dp"
+                        android:text="save changes" />
 
                     <Button
                         android:id="@+id/cancelBtn_editPost"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_height="match_parent"
                         android:layout_marginEnd="8dp"
-                        android:text="cancel"
-                        app:layout_constraintBottom_toBottomOf="@+id/save_editPost"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/save_editPost"
-                        app:layout_constraintTop_toTopOf="@+id/save_editPost" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_marginBottom="20dp"
+                        android:text="cancel" />
+                </LinearLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </ScrollView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
