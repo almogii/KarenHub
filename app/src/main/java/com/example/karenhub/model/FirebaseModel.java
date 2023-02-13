@@ -33,6 +33,8 @@ public class FirebaseModel{
     FirebaseStorage storage;
     FirebaseAuth auth;
     FirebaseUser CurrUser;
+    DocumentReference docRef;
+
 
     FirebaseModel(){
         db = FirebaseFirestore.getInstance();
@@ -91,7 +93,9 @@ public class FirebaseModel{
             }
         });
     }
-
+public void updatePostById(Post p,Model.Listener<Void> listener){
+        DocumentReference docRef=db.collection(Post.COLLECTION).document(p.getId());
+}
     void uploadImage(String name, Bitmap bitmap, Model.Listener<String> listener){
         StorageReference storageRef = storage.getReference();
         StorageReference imagesRef = storageRef.child("images/" + name + ".jpg");
@@ -173,6 +177,8 @@ public class FirebaseModel{
             }
         });
     }
+
+
 
     public FirebaseFirestore getDb() {
         return db;
