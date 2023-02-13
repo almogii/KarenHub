@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -65,6 +66,7 @@ public class EditPostFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     ViewModelProvider viewModelProvider;
     MapsFragmentModel viewModel;
+    UserProfileViewModel userViewModel;
 
 
     public static EditPostFragment newInstance() {
@@ -141,14 +143,14 @@ public class EditPostFragment extends Fragment {
         if (this.locationName != null) {
             binding.addresseditpost.setText(locationName);
         }
-//show previous post details
+        //show previous post details
         if(title!=null){
             binding.editpostTitle.setText(title);
         }
         if (details!=null){
             binding.editpostDescription.setText(details);
         }
-        if (imgUrl != null){
+        if (imgUrl != null && !imgUrl.equals("")){
             Picasso.get().load(imgUrl).into(binding.avatarImgEditPost);
         }
         if(locationName!=null){
@@ -174,6 +176,7 @@ public class EditPostFragment extends Fragment {
                 Model.instance().uploadImage(id, bitmap, url -> {
                     if (url != null) {
                         updates.put("image",url);
+                        imgUrl = url;
                     }
                 });
             }
@@ -186,9 +189,20 @@ public class EditPostFragment extends Fragment {
             if(!editedLocation.isEmpty() ||locationName!=null){
                 updates.put("location",editedLocation);
             }
+
             updatePostByid(id);
-            Navigation.findNavController(view1).popBackStack(R.id.postFragment,true);
-            //Navigation.findNavController(view1).navigate(R.id.action_postsListFragment_to_postFragment);
+            viewModelProvider = new ViewModelProvider(getActivity());
+            userViewModel = viewModelProvider.get(UserProfileViewModel.class);
+            /*Navigation.findNavController(view1).navigateUp();
+            Navigation.findNavController(view1).navigateUp();*/
+            getActivity().finish();
+            Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(
+                            getContext(), android.R.anim.fade_in, android.R.anim.fade_out)
+                    .toBundle();
+            startActivity(getActivity().getIntent(),bundle);
+            if (userViewModel.getActiveState()){
+                Navigation.findNavController(view).navigate(R.id.userProfile);
+            }
         });
         binding.cancelBtnEditPost.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.postFragment, false));
         binding.imageBtnEditPost.setOnClickListener(view1 -> {

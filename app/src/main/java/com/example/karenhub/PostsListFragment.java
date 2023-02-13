@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,9 +26,8 @@ import com.example.karenhub.databinding.FragmentPostsListBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 public class PostsListFragment extends Fragment {
     FragmentPostsListBinding binding;
@@ -50,17 +51,12 @@ public class PostsListFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
         viewModelProvider = new ViewModelProvider(getActivity());
         userViewModel = viewModelProvider.get(UserProfileViewModel.class);
-        ((AppCompatActivity)getActivity()).getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                reloadData(userViewModel.getActiveState());
-            }
-        });
 
         adapter.setOnItemClickListener(new PostRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
                 Post st = postListViewModel.getData().get(pos);
+                Picasso.get().invalidate(st.imgUrl);
                 PostsListFragmentDirections.ActionPostsListFragmentToPostFragment action =
                         PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl,st.id);
                 Navigation.findNavController(view).navigate((NavDirections) action);
@@ -80,6 +76,7 @@ public class PostsListFragment extends Fragment {
    @Override
     public void onStart() {
         super.onStart();
+        reloadData(userViewModel.getActiveState());
     }
 
     @Override
