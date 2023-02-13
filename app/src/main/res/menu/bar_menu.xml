@@ -6,6 +6,10 @@
         android:icon="@drawable/ic_baseline_home_24"
         android:title="Home" />
     <item
+        android:id="@+id/userProfile"
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:title="Profile" />
+    <item
         android:id="@+id/addNewPostFragment"
         android:icon="@android:drawable/ic_input_add"
         android:title="Add" />

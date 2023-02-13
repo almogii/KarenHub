@@ -86,5 +86,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder>{
         return data.size();
     }
 
+
+
 }
 

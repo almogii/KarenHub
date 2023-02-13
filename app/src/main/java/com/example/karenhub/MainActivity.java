@@ -14,12 +14,15 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.main_navhost);
         navController = navHostFragment.getNavController();
@@ -48,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView,navController);
 
         navController.addOnDestinationChangedListener((navController,navDestination,bundle)->{
-
             if(navDestination.getLabel().equals("Set Location")){
                 fragment_state = 1;
                 navView.getMenu().clear();
@@ -104,4 +107,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        return false;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        int statusBarHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        int actionBarHeight = getSupportActionBar().getHeight();
+
+        ViewGroup topLevelLayout = findViewById(R.id.main_navhost);
+        topLevelLayout.setPadding(0, actionBarHeight + statusBarHeight, 0, 0);
+        getSupportActionBar().hide();
+    }
 }
