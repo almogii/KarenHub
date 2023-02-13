@@ -83,6 +83,9 @@ public class Model {
      public void login(String email,String password,Listener<Pair<Boolean,String>> listener){
         firebaseModel.login(email,password,listener);
      }
+public void getPostById(String id,Listener<Post> listener){
+        firebaseModel.getPostById(id, listener);
+}
 
 
      public FirebaseFirestore getDb(){

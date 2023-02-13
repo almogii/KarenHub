@@ -1,7 +1,9 @@
 package com.example.karenhub;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 public class PostFragment extends Fragment {
@@ -23,8 +27,10 @@ public class PostFragment extends Fragment {
     String imgUrl;
     String label;
     ImageView image;
+    String id;
+    SharedPreferences sp;
 
-    public static PostFragment newInstance(String title, String details, String location, String ImgUrl, String label){
+    public static PostFragment newInstance(String title, String details, String location, String ImgUrl, String label,String id){
         PostFragment frag = new PostFragment();
         Bundle bundle = new Bundle();
         bundle.putString("TITLE",title);
@@ -32,6 +38,7 @@ public class PostFragment extends Fragment {
         bundle.putString("LOCATION",location);
         bundle.putString("IMAGE",ImgUrl);
         bundle.putString("LABEL",label);
+        bundle.putString("ID",id);
         frag.setArguments(bundle);
         return frag;
     }
@@ -39,6 +46,7 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp=getContext().getSharedPreferences("user",getContext().MODE_PRIVATE);
         Bundle bundle = getArguments();
         if (bundle != null){
             this.title = bundle.getString("TITLE");
@@ -46,6 +54,7 @@ public class PostFragment extends Fragment {
             this.location=bundle.getString("LOCATION");
             this.imgUrl=bundle.getString("IMAGE");
             this.label=bundle.getString("LABEL");
+            this.id=bundle.getString("ID");
         }
     }
 
@@ -54,13 +63,15 @@ public class PostFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post, container, false);
-
+        View button = view.findViewById(R.id.editBtn_postFrag);
+        button.setVisibility(View.INVISIBLE);
         //show post details
         title = PostFragmentArgs.fromBundle(getArguments()).getPostTitle();
         details=PostFragmentArgs.fromBundle(getArguments()).getPostDetails();
         location=PostFragmentArgs.fromBundle(getArguments()).getPostLocInfo();
         imgUrl=PostFragmentArgs.fromBundle(getArguments()).getPostImgUrl();
        label=PostFragmentArgs.fromBundle(getArguments()) .getPostLabel();
+       id=PostFragmentArgs.fromBundle(getArguments()).getPostId();
 
         TextView titleTv = view.findViewById(R.id.postfrag_title_tv);
         if (title != null){titleTv.setText(title);}
@@ -76,8 +87,19 @@ public class PostFragment extends Fragment {
         if(label!=null){
             labelTV.setText(label);
         }
-        View button = view.findViewById(R.id.postfrag_back_btn);
-        button.setOnClickListener((view1)-> Navigation.findNavController(view1).popBackStack());
+
+        //check if user has permissions
+        String currUserLabel= sp.getString("label","");
+       if(currUserLabel.equals(label)){
+           button.setVisibility(View.VISIBLE);
+           button.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   PostFragmentDirections.ActionPostFragmentToEditPostFragment action=PostFragmentDirections.actionPostFragmentToEditPostFragment( new LatLng(0,0),location,id,title,details,label,imgUrl);
+                   Navigation.findNavController(view).navigate((NavDirections) action);
+               }
+           });
+       }
         return view;
     }
     public void setTitle(String title) {

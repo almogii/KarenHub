@@ -37,7 +37,6 @@ public class PostsListFragment extends Fragment {
         bottomNavigationView = getActivity().findViewById(R.id.main_bottomNavigationView);
         binding = FragmentPostsListBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new PostRecyclerAdapter(getLayoutInflater(), viewModel.getData());
@@ -50,7 +49,7 @@ public class PostsListFragment extends Fragment {
             public void onItemClick(int pos) {
                 Post st = viewModel.getData().get(pos);
                 PostsListFragmentDirections.ActionPostsListFragmentToPostFragment action =
-                        PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl);
+                        PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl,st.id);
                 Navigation.findNavController(view).navigate((NavDirections) action);
             }
         });
