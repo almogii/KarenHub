@@ -2,13 +2,17 @@ package com.example.karenhub;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,13 +26,17 @@ import com.example.karenhub.databinding.FragmentPostsListBinding;
 import com.example.karenhub.model.Model;
 import com.example.karenhub.model.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 public class PostsListFragment extends Fragment {
     FragmentPostsListBinding binding;
     PostRecyclerAdapter adapter;
-    PostsListFragmentViewModel viewModel;
+    PostsListFragmentViewModel postListViewModel;
     private BottomNavigationView bottomNavigationView;
     SharedPreferences sp;
+    ViewModelProvider viewModelProvider;
+    UserProfileViewModel userViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,15 +47,16 @@ public class PostsListFragment extends Fragment {
         View view = binding.getRoot();
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PostRecyclerAdapter(getLayoutInflater(), viewModel.getData());
+        adapter = new PostRecyclerAdapter(getLayoutInflater(), postListViewModel.getData());
         binding.recyclerView.setAdapter(adapter);
-
-
+        viewModelProvider = new ViewModelProvider(getActivity());
+        userViewModel = viewModelProvider.get(UserProfileViewModel.class);
 
         adapter.setOnItemClickListener(new PostRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                Post st = viewModel.getData().get(pos);
+                Post st = postListViewModel.getData().get(pos);
+                Picasso.get().invalidate(st.imgUrl);
                 PostsListFragmentDirections.ActionPostsListFragmentToPostFragment action =
                         PostsListFragmentDirections.actionPostsListFragmentToPostFragment(st.title,st.details,st.location,st.label,st.imgUrl,st.id);
                 Navigation.findNavController(view).navigate((NavDirections) action);
@@ -61,20 +70,19 @@ public class PostsListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(PostsListFragmentViewModel.class);
+        postListViewModel = new ViewModelProvider(this).get(PostsListFragmentViewModel.class);
     }
 
    @Override
     public void onStart() {
         super.onStart();
+        reloadData(userViewModel.getActiveState());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
-        UserProfileViewModel viewModel = viewModelProvider.get(UserProfileViewModel.class);
-        reloadData(viewModel.getActiveState());
+        reloadData(userViewModel.getActiveState());
     }
 
     @Override
@@ -86,15 +94,15 @@ public class PostsListFragment extends Fragment {
         binding.progressBar.setVisibility(View.VISIBLE);
         if(!activeState) {
             Model.instance().getAllPosts((stList) -> {
-                viewModel.setData(stList);
-                adapter.setData(viewModel.getData());
+                postListViewModel.setData(stList);
+                adapter.setData(postListViewModel.getData());
                 binding.progressBar.setVisibility(View.GONE);
             });
         } else {
             sp = getActivity().getSharedPreferences("user", MODE_PRIVATE);
             Model.instance().getUserPosts(sp.getString("label",""),(stList) -> {
-                viewModel.setData(stList);
-                adapter.setData(viewModel.getData());
+                postListViewModel.setData(stList);
+                adapter.setData(postListViewModel.getData());
                 binding.progressBar.setVisibility(View.GONE);
             });
         }

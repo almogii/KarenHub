@@ -81,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_button"
+            android:background="@drawable/roundstyle"
             android:text="Logout"
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -1,5 +1,6 @@
 package com.example.karenhub;
 
+import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -80,7 +81,7 @@ public class PostFragment extends Fragment {
         locationTV=view.findViewById(R.id.postLocation);
         if(location!=null){locationTV.setText(location);}
         image=view.findViewById(R.id.postUrl_blueFrag);
-        if(!imgUrl.isEmpty()){
+        if(imgUrl!=null && !imgUrl.equals("")){
             Picasso.get().load(imgUrl).into(image);
         }
         labelTV=view.findViewById(R.id.labelTv);
@@ -100,6 +101,7 @@ public class PostFragment extends Fragment {
                }
            });
        }
+
         return view;
     }
     public void setTitle(String title) {
@@ -113,6 +115,11 @@ public class PostFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

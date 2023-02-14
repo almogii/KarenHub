@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.karenhub.model.Post;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -41,7 +43,13 @@ class PostViewHolder extends RecyclerView.ViewHolder{
         //cb.setChecked(post.cb);
         //cb.setTag(pos);
         if (post.getImgUrl()  != "") {
-            Picasso.get().load(post.getImgUrl()).placeholder(R.drawable.avatar).into(avatarImage);
+            //Picasso.get().load(post.getImgUrl()).placeholder(R.drawable.avatar).into(avatarImage);
+            Picasso.get()
+                    .load(post.getImgUrl())
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .into(avatarImage);
+            //.placeholder(R.drawable.avatar)
         }else{
             avatarImage.setImageResource(R.drawable.avatar);
         }
@@ -85,8 +93,5 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder>{
     public int getItemCount() {
         return data.size();
     }
-
-
-
 }
 
