@@ -200,9 +200,6 @@ public class AddNewPostFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        /*Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.addNewPostFragment);
-        menuItem.setEnabled(false);*/
         ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
         MapsFragmentModel viewModel = viewModelProvider.get(MapsFragmentModel.class);
         Bundle savedInstanceStateData = viewModel.getSavedInstanceStateData();
