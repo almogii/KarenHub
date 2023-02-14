@@ -169,17 +169,6 @@ public class EditPostFragment extends Fragment {
             String editedDetails=binding.editpostDescription.getText().toString();
             String editedLocation=binding.addresseditpost.getText().toString();
 
-            if (isAvatarSelected) {
-                binding.avatarImgEditPost.setDrawingCacheEnabled(true);
-                binding.avatarImgEditPost.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) binding.avatarImgEditPost.getDrawable()).getBitmap();
-                Model.instance().uploadImage(id, bitmap, url -> {
-                    if (url != null) {
-                        updates.put("image",url);
-                        imgUrl = url;
-                    }
-                });
-            }
             if(editedTitle!=null && editedTitle!=title){
                 updates.put("title",editedTitle);
             }
@@ -189,12 +178,23 @@ public class EditPostFragment extends Fragment {
             if(!editedLocation.isEmpty() ||locationName!=null){
                 updates.put("location",editedLocation);
             }
+            if (isAvatarSelected) {
+                binding.avatarImgEditPost.setDrawingCacheEnabled(true);
+                binding.avatarImgEditPost.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) binding.avatarImgEditPost.getDrawable()).getBitmap();
+                Model.instance().uploadImage(id, bitmap, url -> {
+                    if (url != null) {
+                        updates.put("image",url);
+                        this.imgUrl = url;
+                        Model.instance().updatePostById(id,updates);
+                    }
+                });
+            } else {
+                Model.instance().updatePostById(id,updates);
+            }
 
-            updatePostByid(id);
             viewModelProvider = new ViewModelProvider(getActivity());
             userViewModel = viewModelProvider.get(UserProfileViewModel.class);
-            /*Navigation.findNavController(view1).navigateUp();
-            Navigation.findNavController(view1).navigateUp();*/
             getActivity().finish();
             Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(
                             getContext(), android.R.anim.fade_in, android.R.anim.fade_out)
@@ -252,36 +252,5 @@ public class EditPostFragment extends Fragment {
         } else {
             viewModel.setSavedInstanceStateData(new Bundle());
         }
-    }
-
-
-
-    public void updatePostByid(String id){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Log.d("map",updates.toString());
-        CollectionReference collRef = db.collection("posts");
-        collRef.whereEqualTo("id", id)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            DocumentReference docRef = documentSnapshot.getReference();
-                            docRef.update(updates)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d("TAG1", "DocumentSnapshot successfully updated!");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w("TAG2", "Error updating document", e);
-                                        }
-                                    });
-                        }
-                    }
-                });
     }
 }

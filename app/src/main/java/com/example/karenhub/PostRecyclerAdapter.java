@@ -51,7 +51,7 @@ class PostViewHolder extends RecyclerView.ViewHolder{
                     .into(avatarImage);
             //.placeholder(R.drawable.avatar)
         }else{
-            //avatarImage.setImageResource(R.drawable.avatar);
+            avatarImage.setImageResource(R.drawable.avatar);
         }
     }
 }
