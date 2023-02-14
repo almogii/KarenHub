@@ -57,32 +57,10 @@ public class Model {
 
     public void getAllPosts(Listener<List<Post>> callback) {
         firebaseModel.getAllPosts(callback);
-//        executor.execute(()->{
-//            List<Student> data = localDb.studentDao().getAll();
-//            try {
-//                Thread.sleep(5000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            mainHandler.post(()->{
-//                callback.onComplete(data);
-//            });
-//        });
     }
 
     public void addPost(Post st, Listener<Void> listener) {
         firebaseModel.addPost(st, listener);
-//        executor.execute(()->{
-//            localDb.studentDao().insertAll(st);
-//            try {
-//                Thread.sleep(5000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            mainHandler.post(()->{
-//                listener.onComplete();
-//            });
-//        });
     }
 
     public void uploadImage(String name, Bitmap bitmap, Listener<String> listener) {

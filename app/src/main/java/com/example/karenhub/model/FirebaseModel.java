@@ -37,8 +37,6 @@ public class FirebaseModel {
     FirebaseStorage storage;
     FirebaseAuth auth;
     FirebaseUser CurrUser;
-    DocumentReference docRef;
-
 
     FirebaseModel() {
         db = FirebaseFirestore.getInstance();

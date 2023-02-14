@@ -40,8 +40,6 @@ class PostViewHolder extends RecyclerView.ViewHolder{
     public void bind(Post post, int pos) {
         nameTv.setText(post.title);
         idTv.setText(post.label);
-        //cb.setChecked(post.cb);
-        //cb.setTag(pos);
         if (post.getImgUrl()  != "") {
             //Picasso.get().load(post.getImgUrl()).placeholder(R.drawable.avatar).into(avatarImage);
             Picasso.get()
@@ -51,7 +49,7 @@ class PostViewHolder extends RecyclerView.ViewHolder{
                     .into(avatarImage);
             //.placeholder(R.drawable.avatar)
         }else{
-            avatarImage.setImageResource(R.drawable.avatar);
+            avatarImage.setImageResource(R.drawable.noimage);
         }
     }
 }

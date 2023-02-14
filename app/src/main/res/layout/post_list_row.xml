@@ -6,36 +6,54 @@
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground">
 
-    <ImageView
-        android:id="@+id/postlistrow_avatar_img"
-        android:layout_width="380dp"
-        android:layout_height="250dp"
-        android:layout_margin="20dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="335dp"
+        android:layout_height="268dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/avatar" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/postlistrow_name_tv"
-        android:layout_width="86dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:text="TextView"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/postlistrow_label_tv"
-        app:layout_constraintStart_toStartOf="@+id/postlistrow_label_tv"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/postlistrow_label_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/postlistrow_avatar_img"
-        app:layout_constraintStart_toStartOf="@+id/postlistrow_avatar_img" />
+            <ImageView
+                android:id="@+id/postlistrow_avatar_img"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@+id/postlistrow_name_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/noimage" />
+
+            <TextView
+                android:id="@+id/postlistrow_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Post Title"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/postlistrow_avatar_img"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <TextView
+                android:id="@+id/postlistrow_label_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Account Label"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postlistrow_name_tv"
+                tools:layout_editor_absoluteX="0dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

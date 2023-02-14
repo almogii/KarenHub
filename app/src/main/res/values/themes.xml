@@ -29,4 +29,20 @@
         <item name="android:statusBarColor">#4f1846</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Title_Style" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#808080</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:textColorHint">#000000</item>
+        <item name="android:textColorLink">#0000FF</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:strokeWidth">3</item>
+        <item name="android:strokeColor">@color/black</item>
+    </style>
 </resources>
